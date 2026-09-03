@@ -1,0 +1,8 @@
+MaiPai Catalog
+Third-Party Licenses and Attributions
+
+This repo holds no bundled third-party code, models, or assets yet. Every
+catalog package attributes its own third-party components in its own
+NOTICE file, per docs/PACKAGES.md in getmaipai/.github. This file will
+list attributions for anything the catalog's own tooling (lint, pack,
+sign, index, scorecard) bundles, once that tooling exists.
