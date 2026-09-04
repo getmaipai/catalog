@@ -49,7 +49,7 @@ Git workflow.
 
 - [x] Repo created, public, with LICENSE (AGPL-3.0), NOTICE, this design
       record, and `scripts/check.sh` pinned to `@maipai/standards`
-      std-v0.1.0.
+      std-v0.2.0.
 - [ ] `tools/` (lint, pack, sign, index, scorecard): not started; needed
       before any package can publish.
 - [ ] `AGENTS.md`, `ASSIGNMENT.md`, `CONTRIBUTING.md`: placeholders only;
