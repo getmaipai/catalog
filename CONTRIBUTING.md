@@ -5,8 +5,9 @@ one place that accepts pull requests. Every other repo takes direct commits
 from the maintainer only.
 
 - **Packages, not patches.** A contribution here is almost always a new
-  package (`skills/`, `apps/`, `companions/`, `integrations/`, `models/`,
-  `wakewords/`, `voices/`) or a fix to an existing one, not a change to core.
+  package (`plugins/`, `skills/`, `apps/`, `companions/`, `integrations/`,
+  `models/`, `wakewords/`, `voices/`) or a fix to an existing one, not a
+  change to core.
   See
   [docs/PACKAGES.md](https://github.com/getmaipai/.github/blob/main/docs/PACKAGES.md)
   in `.github` for the manifest format and the definition of done (bronze

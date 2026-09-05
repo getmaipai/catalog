@@ -8,17 +8,18 @@ first packages build toward.
 
 ## What this repo is
 
-The public package catalog: every skill, app, companion, integration,
-model, wake word, voice, and theme that runs on the hub or the robot, as
-source, with CI, offline signing, and a TUF-style signed static index
-published to GitHub Pages. `home` and `bot` install from this catalog; the
-hub pushes packages to paired robots. Full contract:
+The public package catalog: every plugin, skill, app, companion,
+integration, model, wake word, voice, and theme that runs on the hub or
+the robot, as source, with CI, offline signing, and a TUF-style signed
+static index published to GitHub Pages. `home` and `bot` install from
+this catalog; the hub pushes packages to paired robots. Full contract:
 [docs/PACKAGES.md](https://github.com/getmaipai/.github/blob/main/docs/PACKAGES.md)
 in `.github`.
 
 ## Repo layout (target shape)
 
 ```
+plugins/<category>/<id>/
 skills/<category>/<id>/
 apps/<id>/
 companions/<id>/
@@ -62,7 +63,7 @@ Git workflow.
 
 ## Review queue
 
-Every legacy hub feature and legacy robot skill gets a one-line verdict
+Every legacy hub feature and legacy robot plugin gets a one-line verdict
 here before it becomes a package: rebuild as designed, redesign, merge, or
 drop, with the reason. Empty until the legacy review pass runs (platform
 plan section 5.8, open item in section 15).

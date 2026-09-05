@@ -9,9 +9,9 @@
 
 <p align="center">Documentation · <a href="https://github.com/getmaipai/home">Home</a> · <a href="https://github.com/getmaipai/bot">Bot</a></p>
 
-Every skill, app, companion, integration, model, wake word, voice, and
-theme for your hub and robot, in one signed catalog you review and install
-with one click.
+Every plugin, skill, app, companion, integration, model, wake word,
+voice, and theme for your hub and robot, in one signed catalog you review
+and install with one click.
 
 ## Status
 
@@ -23,9 +23,9 @@ the current step-0 checklist.
 
 ## What will live here
 
-- `skills/`, `apps/`, `companions/`, `integrations/`, `models/`,
-  `wakewords/`, `voices/`: one directory per package, one manifest format
-  for every kind.
+- `plugins/`, `skills/`, `apps/`, `companions/`, `integrations/`,
+  `models/`, `wakewords/`, `voices/`: one directory per package, one
+  manifest format for every kind.
 - `schema/`: mirrored from `home/spec/`, the shapes every package's
   manifest and recipe conform to.
 - `tools/`: the lint, pack, sign, index, and scorecard tooling, and the

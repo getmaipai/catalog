@@ -13,8 +13,9 @@ done.
 
 ## The shape of a conforming package
 
-One directory, one manifest, one format for every kind (`skill`, `app`,
-`companion`, `integration`, `model`, `wakeword`, `voice`, `theme`). Start
+One directory, one manifest, one format for every kind (`plugin`,
+`skill`, `app`, `companion`, `integration`, `model`, `wakeword`, `voice`,
+`theme`). Start
 at Tier 0 (a recipe or a prompt body) unless the logic genuinely cannot be
 expressed that way. See `docs/dev.md` in this repo for the target
 directory layout.
