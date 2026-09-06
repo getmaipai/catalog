@@ -34,9 +34,8 @@ ASSIGNMENT.md    # the copyright assignment contributors sign
 CONTRIBUTING.md
 ```
 
-As of this seed, the directories exist and are empty. Nothing has been
-built yet; the first content is whatever survives the review queue below,
-starting with the packages hub v0.1 bundles.
+As of this seed, the directories exist and are empty; see "Step 0 status"
+below for what has landed since.
 
 ## The one PR carve-out
 
@@ -51,15 +50,29 @@ Git workflow.
 - [x] Repo created, public, with LICENSE (AGPL-3.0), NOTICE, this design
       record, and `scripts/check.sh` pinned to `@maipai/standards`
       std-v0.2.0.
-- [ ] `tools/` (lint, pack, sign, index, scorecard): not started; needed
-      before any package can publish.
+- [x] `tools/` (lint, pack, sign, index-builder, scorecard, check,
+      build-index): built (session-d-packages-and-store.md step 6).
+      `scripts/check.sh` runs the full suite, then `check` against every
+      package in the repo.
 - [ ] `AGENTS.md`, `ASSIGNMENT.md`, `CONTRIBUTING.md`: placeholders only;
       full text still to write.
-- [ ] The TUF signed index (`root`, `targets`, `timestamp`): not started;
-      this is Hub v0.2 per the roadmap.
-- [ ] The first packages: blocked on Hub v0.1's default bundled set being
-      reviewed and built first (packages ship bundled with the release
-      before this catalog's store exists).
+- [x] The TUF-shaped signed index (`root`, `targets`, `timestamp`, each
+      with a monotonic `version`): built. `bun run build-index` (in
+      `tools/`) packs, signs, and indexes every package in the repo with
+      a local dev keypair. The real maintainer release key and the
+      public CI workflow (a tag-triggered publish with a separate online
+      timestamp key) are still open.
+- [x] The first packages: `define`, `joke`, `trivia`, `weather`,
+      `knowledge`, and `storytime-style` moved here from `home`'s
+      `backend/packages/` as their canonical source (2026-09-06, step 6);
+      all six clear bronze. `home` keeps a signed copy of the default set
+      under its own `backend/packages/`, refreshed from here. `recall`,
+      `remember`, and the companion packages (`buddy`, `default`, `pal`,
+      `tutor`) are still in `home` - not yet at bronze (no
+      README/CHANGELOG/quality_scale.yaml/smoke declaration), and not
+      this session's packages to complete (see `home`'s own
+      `spec/tests/ts/package-bronze.test.ts` for the ownership map).
+      They move here once their owning session brings them to bronze.
 
 ## Review queue
 
