@@ -1,0 +1,66 @@
+name: check
+
+# Tag- and PR-triggered only, never on every push to a branch
+# (getmaipai/.github/CLAUDE.md > Security: "No push-triggered GitHub
+# Actions in private repos... Public repos may keep cheap tag- or
+# docs-triggered workflows" - catalog is public, so CI minutes are
+# free, and this is the one repo in the org that takes pull requests at
+# all). Runs the identical `scripts/check.sh` a contributor runs
+# locally before opening a PR - one rule set, never a second copy of it
+# living only in this file (docs/PACKAGES.md's own "CI on every PR"
+# line, session-d-packages-and-store.md step 6).
+on:
+  pull_request:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out catalog
+        uses: actions/checkout@v4
+
+      # scripts/check.sh's own standards-core step needs a sibling
+      # ../.github checkout (MAIPAI_STANDARDS_DIR), the identical layout
+      # a contributor's own machine has. Pinned to std-v0.2.0 (the exact
+      # tag this repo's docs/dev.md and every other getmaipai repo
+      # pin to), never .github's own main - CI must run the SAME
+      # standards version a contributor tested against locally, not
+      # whatever landed on .github's main after they last pulled it.
+      - name: Check out @maipai/standards (std-v0.2.0)
+        uses: actions/checkout@v4
+        with:
+          repository: getmaipai/.github
+          ref: std-v0.2.0
+          path: .github-standards
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # check-core.sh's own gitleaks step only WARNS (never fails) when
+      # gitleaks isn't on PATH, so CI installs it explicitly rather than
+      # silently skipping the secret scan - a pinned binary download from
+      # gitleaks' own GitHub releases, not a third-party marketplace
+      # action, matching the org's own "download it, depend on it, never
+      # vendor" stance for tooling (getmaipai/.github/CLAUDE.md > Third-
+      # party code and assets). Version pinned from this session's own
+      # knowledge, not verified against a live release list (no network
+      # access from here) - confirm this tag and asset name still
+      # resolve on the FIRST real CI run, and bump it on any later
+      # gitleaks update.
+      - name: Install gitleaks
+        run: |
+          curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz \
+            | tar -xz -C /usr/local/bin gitleaks
+
+      - name: Run check.sh
+        env:
+          MAIPAI_STANDARDS_DIR: ${{ github.workspace }}/.github-standards
+        run: bash scripts/check.sh
