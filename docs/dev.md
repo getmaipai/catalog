@@ -59,9 +59,17 @@ Git workflow.
 - [x] The TUF-shaped signed index (`root`, `targets`, `timestamp`, each
       with a monotonic `version`): built. `bun run build-index` (in
       `tools/`) packs, signs, and indexes every package in the repo with
-      a local dev keypair. The real maintainer release key and the
-      public CI workflow (a tag-triggered publish with a separate online
-      timestamp key) are still open.
+      a local dev keypair. The real maintainer release key (offline,
+      Jesse's own future call) is still open.
+- [x] The public CI workflow (`.github/workflows/check.yml`): tag- and
+      PR-triggered, checks out the pinned `std-v0.2.0` standards ref and
+      runs `scripts/check.sh` (session-d-packages-and-store.md step 6).
+      The fuller CI feature set docs/PACKAGES.md eventually wants (a
+      permission-diff PR comment, a vendoring scan, screenshot
+      generation with vision review, the CLA check) is real, deferred
+      scope beyond "running the same check" - a maintainer-review-plus-
+      CLA merge gate is manual until then, and a tag-triggered publish
+      to a real online timestamp key doesn't exist yet either.
 - [x] The first packages: `define`, `joke`, `trivia`, `weather`,
       `knowledge`, and `storytime-style` moved here from `home`'s
       `backend/packages/` as their canonical source (2026-09-06, step 6);
