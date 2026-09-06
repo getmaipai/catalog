@@ -16,9 +16,16 @@ proposing a package, and what CI runs on every PR.
 - `src/sign.ts`: Ed25519 keypair generation and raw sign/verify, native
   `node:crypto`.
 - `src/index-builder.ts`: builds and signs the TUF-shaped `root.json`,
-  `targets.json`, and `timestamp.json`.
+  `targets.json`, and `timestamp.json`, each carrying a monotonic
+  `version` for rollback detection.
 - `src/check.ts`: the CLI. Finds every package in the repo, runs lint and
   scorecard on each, and reports pass/fail. `bun run check`.
+- `src/build-index.ts`: the CLI that ties pack, sign, and index-builder
+  together for a real set of packages: packs and signs every discovered
+  package and writes the tarballs plus a signed root/targets/timestamp
+  index to an output directory. `bun run build-index -- <outDir>`. Used
+  by the public CI workflow (a tag-triggered publish) and by `home`'s own
+  bundled-package refresh script, each with its own signing keys.
 
 Run `bun test` for the tool suite itself, `bunx tsc --noEmit` to
 typecheck. See `../docs/dev.md` for the repo's own status and

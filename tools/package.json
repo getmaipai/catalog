@@ -6,7 +6,8 @@
   "scripts": {
     "test": "bun test",
     "lint": "tsc --noEmit",
-    "check": "bun run src/check.ts"
+    "check": "bun run src/check.ts",
+    "build-index": "bun run src/build-index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",

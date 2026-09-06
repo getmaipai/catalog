@@ -21,6 +21,13 @@ export interface SignedEnvelope<T> {
 
 export interface RootMetadata {
   type: "root";
+  // TUF's own rollback defense: a verifying client remembers the highest
+  // `version` it has ever seen for each role and refuses anything lower,
+  // even a validly-signed, not-yet-expired file - the "rolled-back
+  // index" tamper case (docs/PACKAGES.md) an expiry check ALONE can't
+  // catch, since a withdrawn-but-still-valid older file is still
+  // unexpired. Monotonic across builds (see build-index.ts).
+  version: number;
   expires: string;
   keys: Record<string, { keytype: "ed25519"; public: string }>;
   roles: {
@@ -46,12 +53,14 @@ export interface TargetEntry {
 
 export interface TargetsMetadata {
   type: "targets";
+  version: number;
   expires: string;
   targets: Record<string, TargetEntry>;
 }
 
 export interface TimestampMetadata {
   type: "timestamp";
+  version: number;
   expires: string;
   meta: { "targets.json": { length: number; hashes: { sha256: string } } };
 }
@@ -103,7 +112,7 @@ export interface SignerKey {
  * key-loss recovery procedure is written (that procedure, and whether
  * to raise the threshold once it exists, is Jesse's own call, not this
  * function's). */
-export function buildRoot(signers: SignerKey[], expiresInDays: number): SignedEnvelope<RootMetadata> {
+export function buildRoot(signers: SignerKey[], expiresInDays: number, version: number): SignedEnvelope<RootMetadata> {
   const keys: RootMetadata["keys"] = {};
   const keyids: string[] = [];
   for (const signer of signers) {
@@ -114,6 +123,7 @@ export function buildRoot(signers: SignerKey[], expiresInDays: number): SignedEn
   }
   const root: RootMetadata = {
     type: "root",
+    version,
     expires: new Date(Date.now() + expiresInDays * 86_400_000).toISOString(),
     keys,
     roles: {
@@ -132,10 +142,12 @@ export function buildTargets(
   targets: Record<string, TargetEntry>,
   signer: SignerKey,
   expiresInDays: number,
+  version: number,
 ): SignedEnvelope<TargetsMetadata> {
   const publicKeyPem = readFileSync(signer.publicKeyPath, "utf-8");
   const metadata: TargetsMetadata = {
     type: "targets",
+    version,
     expires: new Date(Date.now() + expiresInDays * 86_400_000).toISOString(),
     targets,
   };
@@ -147,11 +159,17 @@ export function buildTargets(
  * step 6's own plan text) - a short expiry is what makes a rolled-back
  * or withheld index detectable at all, the entire point of a timestamp
  * role in TUF's own design. */
-export function buildTimestamp(targetsPath: string, signer: SignerKey, expiresInDays = 30): SignedEnvelope<TimestampMetadata> {
+export function buildTimestamp(
+  targetsPath: string,
+  signer: SignerKey,
+  version: number,
+  expiresInDays = 30,
+): SignedEnvelope<TimestampMetadata> {
   const targetsBytes = readFileSync(targetsPath);
   const publicKeyPem = readFileSync(signer.publicKeyPath, "utf-8");
   const metadata: TimestampMetadata = {
     type: "timestamp",
+    version,
     expires: new Date(Date.now() + expiresInDays * 86_400_000).toISOString(),
     meta: {
       "targets.json": {
