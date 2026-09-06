@@ -1,8 +1,13 @@
 MaiPai Catalog
 Third-Party Licenses and Attributions
 
-This repo holds no bundled third-party code, models, or assets yet. Every
+This repo holds no bundled third-party code, models, or assets. Every
 catalog package attributes its own third-party components in its own
-NOTICE file, per docs/PACKAGES.md in getmaipai/.github. This file will
-list attributions for anything the catalog's own tooling (lint, pack,
-sign, index, scorecard) bundles, once that tooling exists.
+NOTICE file, per docs/PACKAGES.md in getmaipai/.github. Below: the
+catalog's own tooling (tools/), a server-side Bun CLI never redistributed
+as part of any package or build artifact.
+
+- ajv, ajv-formats (MIT) - https://ajv.js.org
+- tar (BlueOak-1.0.0) - https://github.com/isaacs/node-tar
+
+When another tooling dependency lands, its attribution goes here.
