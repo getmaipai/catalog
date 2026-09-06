@@ -81,6 +81,9 @@ Git workflow.
       this session's packages to complete (see `home`'s own
       `spec/tests/ts/package-bronze.test.ts` for the ownership map).
       They move here once their owning session brings them to bronze.
+- [x] [`docs/BACKLOG.md`](BACKLOG.md) added (2026-09-06) - the scannable
+      what's-built/what's-missing list per `getmaipai/CLAUDE.md`'s Backlog
+      and status standard; feeds the org's status dashboard.
 
 ## Review queue
 
