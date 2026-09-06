@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getmaipai.github.io/.github/standards/schemas/privacy-row.schema.json",
+  "title": "PrivacyRow",
+  "description": "One row of a 'what leaves the house' table: one outbound connection a package declares in its manifest's data_sources[]. The generated privacy page (docs/ENGINEERING.md > Privacy, CLAUDE.md > Privacy architecture) is built entirely from these declarations, never hand-maintained.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "destination", "when", "what", "who", "opt_in", "retention"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "destination": {
+      "type": "string",
+      "description": "The host or service this connects to, named descriptively (docs/PACKAGES.md, the org's Trademarks rule)."
+    },
+    "when": {
+      "type": "string",
+      "description": "The trigger, in plain language: 'on package install', 'each time the family asks for weather', 'once a day at the update check'."
+    },
+    "what": {
+      "type": "string",
+      "description": "What this connection carries, in plain language."
+    },
+    "who": {
+      "type": "string",
+      "description": "Who receives it: the named third-party service, or 'nobody, this stays on the LAN'."
+    },
+    "opt_in": {
+      "type": "boolean",
+      "description": "False only for the handful of core, always-on connections (update checks, the store's signed index); every integration is opt_in: true."
+    },
+    "retention": {
+      "type": "string",
+      "description": "How long the destination keeps it, in plain language, or 'unknown, see the service's own policy' when the household does not control it."
+    }
+  }
+}
