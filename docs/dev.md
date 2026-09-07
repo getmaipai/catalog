@@ -53,10 +53,12 @@ Git workflow.
       build-index): built (session-d-packages-and-store.md step 6).
       `scripts/check.sh` runs the full suite, then `check` against every
       package in the repo.
-- [x] `CLAUDE.md` (repo orientation, org standards pointer) and `AGENTS.md`
-      (symlink to it, per `getmaipai/CLAUDE.md`'s standard) added
-      2026-09-06. The package-writing guide that used to live in
-      `AGENTS.md` moved into "Package-writing guide for agents" below.
+- [x] `AGENTS.md` (repo orientation, org standards pointer) added
+      2026-09-06, with `CLAUDE.md` as a one-line `@AGENTS.md` import per
+      [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory)'s
+      pattern for repos multiple agent tools read. The package-writing
+      guide that used to live in `AGENTS.md` moved into "Package-writing
+      guide for agents" below.
 - [ ] `ASSIGNMENT.md`, `CONTRIBUTING.md`: placeholders only; full text
       still to write.
 - [x] The TUF-shaped signed index (`root`, `targets`, `timestamp`, each
