@@ -29,7 +29,6 @@ wakewords/<id>/
 voices/<id>/
 schema/          # mirrored from home/spec/, not hand-edited here
 tools/           # lint, pack, sign, index, scorecard, the `check` CLI
-AGENTS.md        # package-writing skills so an agent produces a conforming package
 ASSIGNMENT.md    # the copyright assignment contributors sign
 CONTRIBUTING.md
 ```
@@ -54,8 +53,12 @@ Git workflow.
       build-index): built (session-d-packages-and-store.md step 6).
       `scripts/check.sh` runs the full suite, then `check` against every
       package in the repo.
-- [ ] `AGENTS.md`, `ASSIGNMENT.md`, `CONTRIBUTING.md`: placeholders only;
-      full text still to write.
+- [x] `CLAUDE.md` (repo orientation, org standards pointer) and `AGENTS.md`
+      (symlink to it, per `getmaipai/CLAUDE.md`'s standard) added
+      2026-09-06. The package-writing guide that used to live in
+      `AGENTS.md` moved into "Package-writing guide for agents" below.
+- [ ] `ASSIGNMENT.md`, `CONTRIBUTING.md`: placeholders only; full text
+      still to write.
 - [x] The TUF-shaped signed index (`root`, `targets`, `timestamp`, each
       with a monotonic `version`): built. `bun run build-index` (in
       `tools/`) packs, signs, and indexes every package in the repo with
@@ -84,6 +87,33 @@ Git workflow.
 - [x] [`docs/BACKLOG.md`](BACKLOG.md) added (2026-09-06) - the scannable
       what's-built/what's-missing list per `getmaipai/CLAUDE.md`'s Backlog
       and status standard; feeds the org's status dashboard.
+
+## Package-writing guide for agents
+
+What an AI agent (human-directed or autonomous) should read before
+proposing a package here. Use the org's
+[`new-package`](https://github.com/getmaipai/.github/blob/main/plugin/skills/new-package/SKILL.md)
+plugin skill and
+[docs/PACKAGES.md](https://github.com/getmaipai/.github/blob/main/docs/PACKAGES.md)
+in `.github` for the manifest format and the bronze-tier definition of
+done; run this repo's own `tools/` (lint, pack, sign, index, scorecard,
+the `check` CLI, described above) locally before opening a PR.
+
+The shape of a conforming package: one directory, one manifest, one
+format for every kind (`plugin`, `skill`, `app`, `companion`,
+`integration`, `model`, `wakeword`, `voice`, `theme`). Start at Tier 0 (a
+recipe or a prompt body) unless the logic genuinely cannot be expressed
+that way. See "Repo layout" above for the target directory layout.
+
+Before proposing anything:
+
+1. Check the review queue below: if this rebuilds or redesigns a legacy
+   feature, its one-line verdict must already be recorded there.
+2. Confirm the package reaches bronze (tests, five-plus routing examples,
+   a privacy row per data source, stated offline behavior, a smoke test,
+   README and changelog, lint clean) before opening a PR.
+3. Read [CONTRIBUTING.md](../CONTRIBUTING.md) and
+   [ASSIGNMENT.md](../ASSIGNMENT.md).
 
 ## Review queue
 
