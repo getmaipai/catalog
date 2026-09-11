@@ -119,6 +119,12 @@ Before proposing anything:
 
 ## Review queue
 
+The knowledge handler reports fetch failures as `network_unreachable` so
+the host can choose the manifest's fallback reply. This preserves Home's
+existing behavior in the canonical catalog source. The registered handler
+is exported for the package's offline regression test; it uses a rejected
+host request and never fetches live data.
+
 Every legacy hub feature and legacy robot plugin gets a one-line verdict
 here before it becomes a package: rebuild as designed, redesign, merge, or
 drop, with the reason. Empty until the legacy review pass runs (platform

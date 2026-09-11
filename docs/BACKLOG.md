@@ -48,6 +48,14 @@ packages landed).
 
 ## Packages: plugins (Tier 0/1)
 
+- [x] **Knowledge lookup failure parity** (S): `plugins/info/knowledge/handler.ts`
+      returns typed fetch failures, matching Home's package-host contract.
+      Mirrors Home's existing failure behavior; `handler_test.ts` exercises
+      the registered handler with a rejected host request. Successful
+      summary formatting stays unchanged. New data sources are out of scope.
+      Exit: `deno test plugins/info/knowledge/handler_test.ts` and
+      `bash scripts/check.sh`.
+
 - [x] **`define`, `weather`** (Tier 0, recipe-based) - `plugins/utilities/`,
       each with `manifest.json`, `recipe.json`, `tests/`,
       `quality_scale.yaml`, `README.md`, `CHANGELOG.md`. Bronze per
