@@ -4,7 +4,7 @@
   "kind": "plugin",
   "category": "Fun",
   "display": "Trivia",
-  "description": "Ask a random trivia question and give the answer.",
+  "description": "Give a random trivia question and its answer.",
   "author": "MaiPai",
   "license": "AGPL-3.0",
   "homepage": "https://github.com/getmaipai/home",
