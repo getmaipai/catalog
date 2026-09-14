@@ -17,7 +17,7 @@
       "how's the weather in Miami today",
       "is it going to rain in Portland today"
     ],
-    "patterns": ["what's the weather in *", "weather in *", "how's the weather in *", "what's the weather like in *"]
+    "patterns": ["what's the weather in *", "weather in *", "how's the weather in *", "what's the weather like in *", "is it going to rain in *", "will it rain in *"]
   },
   "args": {
     "type": "object",
