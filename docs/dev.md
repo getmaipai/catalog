@@ -69,12 +69,13 @@ Git workflow.
 - [x] The public CI workflow (`.github/workflows/check.yml`): tag- and
       PR-triggered, checks out the pinned `std-v0.2.0` standards ref and
       runs `scripts/check.sh` (session-d-packages-and-store.md step 6).
-      The fuller CI feature set docs/PACKAGES.md eventually wants (a
-      permission-diff PR comment, a vendoring scan, screenshot
-      generation with vision review, the CLA check) is real, deferred
-      scope beyond "running the same check" - a maintainer-review-plus-
-      CLA merge gate is manual until then, and a tag-triggered publish
-      to a real online timestamp key doesn't exist yet either.
+      Of the fuller CI set docs/PACKAGES.md wants, the vendoring scan, the
+      licence check, the banned-API scan and the permission-diff PR comment
+      now run (the three scans inside `check`, the comment as its own job);
+      screenshot generation with vision review and the CLA check are still
+      deferred, so a maintainer-review-plus-CLA merge gate stays manual, and
+      a tag-triggered publish to a real online timestamp key does not exist
+      yet either.
 - [x] The first packages: `define`, `joke`, `trivia`, `weather`,
       `knowledge`, and `storytime-style` moved here from `home`'s
       `backend/packages/` as their canonical source (2026-09-06, step 6);

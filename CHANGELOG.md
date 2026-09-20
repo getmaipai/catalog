@@ -21,7 +21,7 @@ checklist; no release has been cut yet.
   calls a sandboxed handler can never make).
 - The permission diff: a tool that renders what a change does to a
   package's permissions, data sources, role floor and offline stance
-  as Markdown.
+  as Markdown, and the CI job that posts it on every pull request.
 - The engine index: `engines/index.json`, the signed list of pinned
   engine builds MaiPai Stack installs from, with its builder.
 - Public CI on pull requests and tags running the same `check.sh` a
