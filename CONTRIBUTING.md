@@ -15,7 +15,11 @@ from the maintainer only.
 - **Sign the assignment first.** Every merge requires the signed copyright
   assignment in [ASSIGNMENT.md](ASSIGNMENT.md). No exceptions, however
   small the patch. Open your PR; a maintainer will point you to the
-  assignment step before review starts.
+  assignment step before review starts. Once you have signed, a maintainer
+  records your GitHub login in `signers.json` with the date and the assignment
+  version; the CLA job on every pull request checks that file and leaves a note
+  on your pull request with the steps if your login is not there yet. Nothing
+  else changes on your side.
 - **The gate has to be green, locally before you open the PR and in
   CI after.** `bash scripts/check.sh` from the repo root runs the
   tools' typecheck and tests, then `check` over every package
