@@ -1,5 +1,5 @@
 import { describe, expect, test, beforeEach, afterEach } from "bun:test";
-import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { vendoringScan } from "../src/vendoring";
@@ -87,12 +87,81 @@ describe("vendoringScan", () => {
     expect(result.errors).toEqual([]);
   });
 
+  test("an arrow parameter named c is not a copyright header", () => {
+    writeMinimalManifest();
+    write("handler.ts", "const items = [1, 2, 3];\nexport const ids = items.map((c) => c);\n");
+    const result = vendoringScan(dir);
+    expect(result.ok).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
+
+  test("a comment that merely mentions the word copyright is not a header", () => {
+    writeMinimalManifest();
+    write("notes.ts", "// this file mentions copyright law\nexport const x = 1;\n");
+    const result = vendoringScan(dir);
+    expect(result.ok).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
+
+  test("a C-style copyright header naming a third party fails", () => {
+    writeMinimalManifest();
+    write("helper.ts", "/* (c) Someone */\nexport const x = 1;\n");
+    const result = vendoringScan(dir);
+    expect(result.ok).toBe(false);
+    expect(result.errors.some((e) => e.startsWith("foreign copyright header in helper.ts"))).toBe(true);
+  });
+
+  test("a copyright header with a year range naming a third party fails", () => {
+    writeMinimalManifest();
+    write("helper.py", "# Copyright 2019-2024 Someone Else\nx = 1\n");
+    const result = vendoringScan(dir);
+    expect(result.ok).toBe(false);
+    expect(result.errors.some((e) => e.startsWith("foreign copyright header in helper.py"))).toBe(true);
+  });
+
+  test("a holder that merely contains the allowed name still fails", () => {
+    writeMinimalManifest();
+    write("helper.ts", "// Copyright (c) 2021 MaiPai Forks Inc\nexport const x = 1;\n");
+    const result = vendoringScan(dir);
+    expect(result.ok).toBe(false);
+    expect(result.errors.some((e) => e.startsWith("foreign copyright header in helper.ts"))).toBe(true);
+  });
+
+  test("a holder of the allowed name followed by a comma passes", () => {
+    writeMinimalManifest();
+    write("helper.ts", "// Copyright (c) 2021 MaiPai, Jesse Torres\nexport const x = 1;\n");
+    const result = vendoringScan(dir);
+    expect(result.ok).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
+
+  test("a capitalized Vendor directory is flagged", () => {
+    writeMinimalManifest();
+    write("Vendor/x/index.js", "module.exports = 1;");
+    const result = vendoringScan(dir);
+    expect(result.ok).toBe(false);
+    expect(result.errors.some((e) => e === "vendored directory Vendor/x/index.js" || e.includes("vendored directory Vendor"))).toBe(true);
+  });
+
+  test("a subpackage.json with bundledDependencies is not flagged", () => {
+    writeMinimalManifest();
+    write("subpackage.json", JSON.stringify({ name: "inner", version: "1.0.0", bundledDependencies: ["dep"] }));
+    const result = vendoringScan(dir);
+    expect(result.ok).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
+
+  test("a package.json with bundledDependencies is still flagged", () => {
+    writeMinimalManifest();
+    write("package.json", JSON.stringify({ name: "vendoring-test", version: "1.0.0", bundledDependencies: ["dep"] }));
+    const result = vendoringScan(dir);
+    expect(result.ok).toBe(false);
+    expect(result.errors.some((e) => e === "bundled dependencies in package.json")).toBe(true);
+  });
+
   test("a clean package (the real plugins/info/knowledge tree) passes", () => {
     const src = join(import.meta.dir, "..", "..", "plugins", "info", "knowledge");
-    const entries = readdirSync(src);
-    for (const entry of entries) {
-      copyFileSync(join(src, entry), join(dir, entry));
-    }
+    cpSync(src, dir, { recursive: true });
     const result = vendoringScan(dir);
     expect(result.ok).toBe(true);
     expect(result.errors).toEqual([]);

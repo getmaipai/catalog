@@ -16,9 +16,34 @@ function readFirstLines(path: string, count: number): string[] {
 }
 
 function findOwnershipHolder(line: string): string | null {
-  const match = line.match(/(?:copyright|©|\(c\))\s+(.*)$/i);
-  if (!match || !match[1]) return null;
-  return match[1].trim();
+  let text = line.trim();
+  if (text.startsWith("<!--")) {
+    text = text.slice(4).trim();
+  } else {
+    for (const prefix of ["//", "#", "/*", "*"]) {
+      if (text.startsWith(prefix)) {
+        text = text.slice(prefix.length).trim();
+        break;
+      }
+    }
+  }
+  let marker = "";
+  const lower = text.toLowerCase();
+  for (const candidate of ["copyright", "(c)", "©"]) {
+    if (lower.startsWith(candidate)) {
+      marker = candidate;
+      break;
+    }
+  }
+  if (!marker) return null;
+  let rest = text.slice(marker.length).trim();
+  if (rest.toLowerCase().startsWith("(c)")) rest = rest.slice(3).trim();
+  if (rest.toLowerCase().startsWith("©")) rest = rest.slice(1).trim();
+  rest = rest
+    .replace(/^\d{4}(?:\s*[-,]\s*\d{4})*[,(]?/, "")
+    .replace(/^[\s,(]+/, "")
+    .trim();
+  return rest === "" ? null : rest;
 }
 
 function readPackageAuthor(dir: string): string | null {
@@ -37,7 +62,10 @@ export function vendoringScan(dir: string): { ok: boolean; errors: string[] } {
   const errors: string[] = [];
   const author = readPackageAuthor(dir);
   const allowedOwners = [...OWNERSHIP_MARKERS];
-  if (author) allowedOwners.push(author.toLowerCase());
+    if (author) {
+      const trimmed = author.toLowerCase().replace(/^[,.\s]+|[,.\s]+$/g, "");
+      if (trimmed) allowedOwners.push(trimmed);
+    }
 
   function walk(current: string): void {
     let entries;
@@ -56,7 +84,7 @@ export function vendoringScan(dir: string): { ok: boolean; errors: string[] } {
         continue;
       }
       if (isDir) {
-        if (VENDORED_DIR_NAMES.includes(entry)) {
+        if (VENDORED_DIR_NAMES.includes(entry.toLowerCase())) {
           errors.push(`vendored directory ${rel}`);
           continue;
         }
@@ -68,7 +96,7 @@ export function vendoringScan(dir: string): { ok: boolean; errors: string[] } {
         errors.push(`minified or bundled file ${rel}`);
         continue;
       }
-      if (lower.endsWith("package.json")) {
+      if (lower === "package.json") {
         try {
           const pkg = JSON.parse(readFileSync(full, "utf-8"));
           if (
@@ -87,8 +115,12 @@ export function vendoringScan(dir: string): { ok: boolean; errors: string[] } {
         for (const line of readFirstLines(full, 40)) {
           const holder = findOwnershipHolder(line);
           if (!holder) continue;
-          const trimmed = holder.toLowerCase();
-          if (!allowedOwners.some((allowed) => trimmed.includes(allowed))) {
+          const trimmed = holder.toLowerCase().replace(/^[,.\s]+|[,.\s]+$/g, "");
+          const commaParts = trimmed
+            .split(",")
+            .map((p) => p.trim())
+            .filter((p) => p !== "");
+          if (!commaParts.every((part) => allowedOwners.includes(part))) {
             errors.push(`foreign copyright header in ${rel}: ${line.trim()}`);
           }
         }
