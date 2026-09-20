@@ -40,6 +40,19 @@ packages landed).
 - [ ] **Screenshot generation + vision review of store images** (M-L) - not
       in `tools/src/`; no screenshot pipeline exists in this repo at all.
 - [x] **Licence check** (S) - tools/src/licence.ts, tested; wired into check.ts by a follow-up item.
+- [x] **Engine index** (S, for the Stack's STACK-97) - `engines/index.json`
+      (pins per platform: name, upstream build tag, url, sha256, size,
+      licence, extra archives, notes), `tools/src/engine-index.ts`
+      (schema validation, duplicate-pin refusal, the signed envelope in
+      the package index's shape with a thirty-day expiry) and its test;
+      `bun run src/engine-index.ts -- <outFile>` writes the
+      `engine-index.json` the release attaches. Publishing it as a
+      release asset joins the release signing item above; the Stack
+      reads `releases/latest/download/engine-index.json`.
+- [ ] **Model index** (S) - the same shape for `models/` once the first
+      model package lands: the Stack already reads
+      `releases/latest/download/model-index.json` (`{ version, models }`
+      with role, minimum profile, quality band and the pinned download).
 - [ ] **Real online timestamp/release signing key** (M) - `sign.ts` only
       has a local dev keypair path; no tag-triggered publish to a real key.
 - [ ] **CLA-signature bot: check a contributor signed `ASSIGNMENT.md` once,

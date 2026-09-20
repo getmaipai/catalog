@@ -104,6 +104,12 @@ export interface SignerKey {
   privateKeyPath: string;
 }
 
+/** Signs any document into the same envelope shape the index uses, with
+ * one signer: what engine-index.ts publishes beside the package index. */
+export function signEnvelope<T>(signed: T, signer: SignerKey): SignedEnvelope<T> {
+  return sign(signed, [{ keyid: keyId(readFileSync(signer.publicKeyPath, "utf-8")), path: signer.privateKeyPath }]);
+}
+
 /** Builds and signs root.json. "A second signer slot from day one"
  * (docs/PACKAGES.md): every role's own `keyids` lists every signer
  * passed in, `threshold` fixed at 1 - either key alone can satisfy a
