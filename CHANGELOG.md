@@ -28,3 +28,9 @@ checklist; no release has been cut yet.
   contributor runs locally.
 - The first packages: the `info`, `fun` and `utilities` plugins and the
   `family` skill that ship bundled with MaiPai Home.
+- The CLA check: `signers.json` (maintainers and signers with the
+  assignment version they signed), `tools/src/cla.ts`, and a
+  pull-request job that fails for a login that has not signed.
+- A CI step summary rendered from `check --json`.
+- The engine index accepts only https urls on the projects' own release
+  hosts (GitHub and Hugging Face).
