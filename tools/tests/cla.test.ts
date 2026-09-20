@@ -4,6 +4,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { hasSigned, loadSigners } from "../src/cla";
 
+const REPO_SIGNERS = join(import.meta.dir, "../../signers.json");
+
 function fixture(signers: unknown): string {
   const dir = mkdtempSync(join(tmpdir(), "maipai-catalog-cla-test-"));
   const path = join(dir, "signers.json");
@@ -32,5 +34,12 @@ describe("CLA", () => {
     const unknown = Bun.spawnSync(["bun", "run", "src/cla.ts", "--", "stranger"], { cwd: join(import.meta.dir, "..") });
     expect(unknown.exitCode).toBe(1);
     expect(unknown.stderr.toString().trim()).toBe("not signed: stranger must sign ASSIGNMENT.md");
+  });
+  test("the shipped signers.json validates and names the maintainer", () => {
+    const data = loadSigners(REPO_SIGNERS);
+    expect(data.maintainers).toContain("JesseWebDotCom");
+  });
+  test("an unknown login is not signed in the shipped signers.json", () => {
+    expect(hasSigned(loadSigners(REPO_SIGNERS), "someone-else")).toBe(false);
   });
 });
