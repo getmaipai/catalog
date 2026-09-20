@@ -31,6 +31,72 @@
         }
       ],
       "notes": "llama.cpp b10797, Windows x64 with CUDA 12.4. Not yet verified on a Windows machine."
+    },
+    {
+      "name": "uv",
+      "tag": "0.12.17",
+      "platform": "darwin",
+      "arch": "arm64",
+      "url": "https://github.com/astral-sh/uv/releases/download/0.12.17/uv-aarch64-apple-darwin.tar.gz",
+      "sha256": "85f00cbdc6dd3e97eba4c31b4d014375a9fdfe8f570023b84e5102fc3456896b",
+      "size": 16929004,
+      "licence": "MIT OR Apache-2.0",
+      "notes": "The Python runtime and package installer the Stack uses to build the managed engines' environments (Pocket TTS, ComfyUI)."
+    },
+    {
+      "name": "uv",
+      "tag": "0.12.17",
+      "platform": "linux",
+      "arch": "arm64",
+      "url": "https://github.com/astral-sh/uv/releases/download/0.12.17/uv-aarch64-unknown-linux-gnu.tar.gz",
+      "sha256": "d636d1b678e9e7f367ecb22b46bd1cabbed234d6bc3b4d96365d2b507f72f86c",
+      "size": 18965833,
+      "licence": "MIT OR Apache-2.0",
+      "notes": "The Python runtime and package installer the Stack uses to build the managed engines' environments (Pocket TTS, ComfyUI)."
+    },
+    {
+      "name": "uv",
+      "tag": "0.12.17",
+      "platform": "linux",
+      "arch": "x64",
+      "url": "https://github.com/astral-sh/uv/releases/download/0.12.17/uv-x86_64-unknown-linux-gnu.tar.gz",
+      "sha256": "fa82fd8dde8e8eefdecada6aa0889666556cfceb690d06e0c3bca49eb3070a63",
+      "size": 19755224,
+      "licence": "MIT OR Apache-2.0",
+      "notes": "The Python runtime and package installer the Stack uses to build the managed engines' environments (Pocket TTS, ComfyUI)."
+    },
+    {
+      "name": "comfyui",
+      "tag": "v0.36.0",
+      "platform": "darwin",
+      "arch": "arm64",
+      "url": "https://github.com/comfyanonymous/ComfyUI/archive/refs/tags/v0.36.0.tar.gz",
+      "sha256": "ab0d2f14e6a20616c6019d7af733aa897507a9a34ed0e88cec9d9c574065e8a1",
+      "size": 12479903,
+      "licence": "GPL-3.0",
+      "notes": "Source release; the Stack builds its environment with uv from the release's hashed requirements."
+    },
+    {
+      "name": "comfyui",
+      "tag": "v0.36.0",
+      "platform": "linux",
+      "arch": "arm64",
+      "url": "https://github.com/comfyanonymous/ComfyUI/archive/refs/tags/v0.36.0.tar.gz",
+      "sha256": "ab0d2f14e6a20616c6019d7af733aa897507a9a34ed0e88cec9d9c574065e8a1",
+      "size": 12479903,
+      "licence": "GPL-3.0",
+      "notes": "Source release; the Stack builds its environment with uv from the release's hashed requirements."
+    },
+    {
+      "name": "comfyui",
+      "tag": "v0.36.0",
+      "platform": "linux",
+      "arch": "x64",
+      "url": "https://github.com/comfyanonymous/ComfyUI/archive/refs/tags/v0.36.0.tar.gz",
+      "sha256": "ab0d2f14e6a20616c6019d7af733aa897507a9a34ed0e88cec9d9c574065e8a1",
+      "size": 12479903,
+      "licence": "GPL-3.0",
+      "notes": "Source release; the Stack builds its environment with uv from the release's hashed requirements."
     }
   ]
 }

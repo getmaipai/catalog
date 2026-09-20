@@ -52,7 +52,7 @@ export const ENGINE_INDEX_SCHEMA = {
         properties: {
           ...archive.properties,
           name: { type: "string", pattern: "^[a-z][a-z0-9-]*$" },
-          tag: { type: "string", pattern: "^b[0-9]+$" },
+          tag: { type: "string", pattern: "^(b[0-9]+|v?[0-9]+(\\.[0-9]+)*)$" },
           platform: { type: "string", enum: ["darwin", "linux", "win32"] },
           arch: { type: "string", enum: ["arm64", "x64"] },
           licence: { type: "string", minLength: 1 },

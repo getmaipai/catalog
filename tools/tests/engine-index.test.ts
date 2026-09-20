@@ -17,7 +17,8 @@ describe("validateEngineIndex", () => {
   test("accepts the repo's own engines/index.json", () => {
     const source = readEngineIndexSource(SOURCE);
     expect(source.engines.length).toBeGreaterThan(0);
-    expect(source.engines.every((entry) => /^b\d+$/.test(entry.tag))).toBe(true);
+    expect(source.engines.some((entry) => entry.name === "uv")).toBe(true);
+    expect(source.engines.some((entry) => entry.name === "comfyui")).toBe(true);
   });
 
   test("refuses a tag that is not an upstream build tag, an http url, a short checksum, and a duplicate pin", () => {
@@ -27,6 +28,18 @@ describe("validateEngineIndex", () => {
     expect(bad({ sha256: "abc" })).toMatchObject({ ok: false });
     expect(validateEngineIndex({ version: "v", engines: [valid.engines[0]!, valid.engines[0]!] })).toMatchObject({ ok: false, errors: ["duplicate entry llama-server/b10797/darwin/arm64"] });
     expect(validateEngineIndex({ version: "v", engines: [{ ...valid.engines[0]!, extra_field: 1 }] })).toMatchObject({ ok: false });
+  });
+
+  test("accepts dotted runtime versions and refuses nightly", () => {
+    const tagged = (tag: string) => validateEngineIndex({ version: "v", engines: [{ ...valid.engines[0]!, tag }] });
+    expect(tagged("0.12.17")).toMatchObject({ ok: true });
+    expect(tagged("v0.36.0")).toMatchObject({ ok: true });
+    expect(tagged("nightly")).toMatchObject({ ok: false });
+  });
+
+  test("shipped index contains the core engine names", () => {
+    const source = readEngineIndexSource(SOURCE);
+    expect(new Set(source.engines.map((entry) => entry.name))).toEqual(new Set(["llama-server", "uv", "comfyui"]));
   });
 });
 

@@ -6,6 +6,8 @@ reads the published copy (`engine-index.json` on the latest release)
 through its opt-in update check and answers "installed X, available Y"
 for engines from it; nothing installs without an explicit action.
 
+The index also lists the runtimes the Stack builds environments with.
+
 `index.json` is the source, edited by hand and reviewed like a package:
 an entry is `name`, `tag` (the upstream build tag, `b10797`),
 `platform` (`darwin`, `linux`, `win32`), `arch` (`arm64`, `x64`), `url`,
