@@ -29,6 +29,7 @@ packages landed).
 - [x] **Scorecard** (`tools/src/scorecard.ts`, tested)
 - [x] **`check` CLI** (`tools/src/check.ts`, tested) - `scripts/check.sh`
       runs this against every package in the repo.
+      `--json` prints the same result as one JSON document for CI; verified at this commit.
 - [x] **Public CI** (`.github/workflows/check.yml`) - tag- and PR-triggered,
       checks out pinned `std-v0.2.0` and runs `scripts/check.sh`.
 - [x] **Permission-diff tool** (M) - tools/src/permission-diff.ts,

@@ -2,7 +2,7 @@ import { describe, expect, test, beforeEach, afterEach } from "bun:test";
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { findPackages, checkPackage, checkAll } from "../src/check";
+import { findPackages, checkPackage, checkAll, toJsonReport } from "../src/check";
 
 let repoRoot: string;
 
@@ -91,5 +91,32 @@ describe("checkAll", () => {
     const results = checkAll(repoRoot);
     expect(results.length).toBe(2);
     expect(results.every((r) => r.passing === false)).toBe(true);
+  });
+});
+
+describe("toJsonReport", () => {
+  test("maps package results to the machine-readable shape", () => {
+    const packages = [join(repoRoot, "apps", "passing"), join(repoRoot, "apps", "failing")];
+    const report = toJsonReport(
+      [
+        { dir: packages[0]!, passing: true, lintErrors: [], scorecardMissing: [], vendoringErrors: [], licenceErrors: [], bannedApiErrors: [] },
+        { dir: packages[1]!, passing: false, lintErrors: [], scorecardMissing: [], vendoringErrors: ["vendored directory vendor"], licenceErrors: [], bannedApiErrors: [] },
+      ],
+      repoRoot,
+    );
+    expect(report.total).toBe(2);
+    expect(report.passing).toBe(1);
+    expect(report.packages[1]!.vendoring.length).toBeGreaterThan(0);
+    expect(report.packages[1]!.passing).toBe(false);
+  });
+
+  test("the CLI emits one JSON document", async () => {
+    const proc = Bun.spawn(["bun", "run", "src/check.ts", "--json"], { cwd: join(import.meta.dir, ".."), stdout: "pipe", stderr: "pipe" });
+    const output = await new Response(proc.stdout).text();
+    await proc.exited;
+    const report = JSON.parse(output) as { packages: unknown[]; passing: number; total: number };
+    expect(Array.isArray(report.packages)).toBe(true);
+    expect(typeof report.passing).toBe("number");
+    expect(typeof report.total).toBe("number");
   });
 });

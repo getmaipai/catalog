@@ -75,6 +75,36 @@ export interface PackageCheckResult {
   passing: boolean;
 }
 
+export interface JsonReport {
+  packages: Array<{
+    dir: string;
+    passing: boolean;
+    lint: string[];
+    scorecard: string[];
+    vendoring: string[];
+    licence: string[];
+    bannedApi: string[];
+  }>;
+  passing: number;
+  total: number;
+}
+
+export function toJsonReport(results: PackageCheckResult[], repoRoot: string): JsonReport {
+  return {
+    packages: results.map((result) => ({
+      dir: result.dir.slice(repoRoot.length + 1),
+      passing: result.passing,
+      lint: result.lintErrors,
+      scorecard: result.scorecardMissing,
+      vendoring: result.vendoringErrors,
+      licence: result.licenceErrors,
+      bannedApi: result.bannedApiErrors,
+    })),
+    passing: results.filter((result) => result.passing).length,
+    total: results.length,
+  };
+}
+
 export function checkPackage(dir: string): PackageCheckResult {
   const lint = lintPackage(dir);
   const score = scorecard(dir);
@@ -98,6 +128,11 @@ export function checkAll(repoRoot: string): PackageCheckResult[] {
 
 function main(): void {
   const results = checkAll(REPO_ROOT);
+  if (process.argv.includes("--json")) {
+    console.log(JSON.stringify(toJsonReport(results, REPO_ROOT), null, 2));
+    if (results.some((result) => !result.passing)) process.exit(1);
+    return;
+  }
   if (results.length === 0) {
     console.log("no packages found yet (every kind directory is still empty) - nothing to check");
     return;
