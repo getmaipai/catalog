@@ -31,8 +31,11 @@ packages landed).
       runs this against every package in the repo.
 - [x] **Public CI** (`.github/workflows/check.yml`) - tag- and PR-triggered,
       checks out pinned `std-v0.2.0` and runs `scripts/check.sh`.
-- [ ] **Permission-diff PR comment** (M) - `CONTRIBUTING.md` promises this
-      as a CI gate; no code for it in `tools/src/`.
+- [x] **Permission-diff tool** (M) - tools/src/permission-diff.ts,
+      tested; the PR comment step is a CI item, opened below.
+- [ ] **Permission-diff PR comment** (S, CI) - a step in
+      .github/workflows/check.yml that runs the tool against the PR's
+      base and posts the Markdown once per PR.
 - [x] **Banned-API scan** (M) - tools/src/bannedApi.ts, thirteen rules,
       tested; wired into check.ts; verified at this commit.
 - [x] **Vendoring scan** (S-M) - `tools/src/vendoring.ts`, wired into
