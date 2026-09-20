@@ -66,7 +66,9 @@ packages landed).
 - [x] **CLA-signature bot: check a contributor signed `ASSIGNMENT.md` once,
       then gate future PRs automatically** (M) - `signers.json` plus
       `tools/src/cla.ts` and the `cla` job; verified at this commit (the
-      legal text of `ASSIGNMENT.md` stays the owner's).
+      legal text of `ASSIGNMENT.md` stays the owner's). The job tells a
+      contributor how to sign and clears the note once they have; verified at
+      this commit (runs on the next PR).
 
 ## Packages: plugins (Tier 0/1)
 
