@@ -137,11 +137,12 @@ packages landed).
 - [ ] **`ASSIGNMENT.md` legal review** (S, Jesse's call, not code) - the
       file states plainly it is a draft, not yet reviewed, and nothing can
       merge under it until he says it's ready.
-- [ ] **`AGENTS.md` real package-scaffolder link** (S-M) - today it just
+- [x] **`AGENTS.md` real package-scaffolder link** (S-M) - today it just
       points contributors at the org's general `new-package` skill and
       `docs/PACKAGES.md`; it says explicitly it will grow once this repo's
       own tooling lands, which it now partly has (`tools/` exists) but
-      `AGENTS.md` hasn't been updated to reference it yet.
+      `AGENTS.md` hasn't been updated to reference it yet. Verified at this
+      commit.
 - [ ] **Refresh `README.md` and `CHANGELOG.md`** (S) - both still describe
       "no tooling, no packages," which is no longer true; drifted from
       `docs/dev.md`.

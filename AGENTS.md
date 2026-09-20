@@ -19,6 +19,11 @@ definition of done, supply chain, and the CLA:
 [docs/PACKAGES.md](https://github.com/getmaipai/.github/blob/main/docs/PACKAGES.md)
 in `.github`.
 
+Starting a package: the org's Claude plugin ships a scaffolder, the
+`new-package` skill in
+[getmaipai/.github](https://github.com/getmaipai/.github/blob/main/plugin/skills/new-package/SKILL.md)
+(`/maipai:new-package` in a Claude Code session with the plugin loaded). It writes one directory with a conforming `manifest.json`, the bronze-tier files and the test stub for the kind you name; the routing examples, tests and README content are still yours to write, and `bun run check` in `tools/` is the bar the result has to pass before a pull request.
+
 Commands: `bun run check` in `tools/` runs lint + the scorecard CLI
 against every package in the repo (that's the tool a new package needs to
 pass, not just its own tests). `bash scripts/check.sh` from the repo root
