@@ -143,7 +143,7 @@ jobs:
       - name: Check out getmaipai/shared (tags fetched, for ensure-tag.sh's own tag worktrees)
         uses: actions/checkout@v4
         with:
-          repository: getmaipai/shared
+          repository: getmaipai/commons
           fetch-tags: true
           path: shared
 
@@ -226,6 +226,40 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.base.sha }}
           path: base
+
+      # tools/package.json pins @maipai/spec as a shared-tags/ worktree
+      # path (SHARED-PIN-01) - this job's own `bun install` needs the
+      # same getmaipai/shared checkout the `check` job sets up above,
+      # found missing here live (PR 1's run: "Could not find folder
+      # file:../../shared-tags/spec-spec-v0.1.1/spec" - this job never
+      # checked `shared` out at all, a gap that predates this pin
+      # change too, since the old bare-checkout pin needed a `shared`
+      # sibling here just as much). See the `check` job above for why
+      # `fetch-tags: true` and the nested-checkout-then-symlink shape.
+      - name: Check out getmaipai/shared (tags fetched, for ensure-tag.sh's own tag worktrees)
+        uses: actions/checkout@v4
+        with:
+          repository: getmaipai/commons
+          fetch-tags: true
+          path: shared
+
+      # -f: a review caught the check job's own un-guarded `ln -s` as
+      # non-idempotent if a runner or workspace were ever reused (not
+      # how GitHub-hosted `ubuntu-latest` runners behave today - each
+      # job gets a fresh VM - but cheap insurance against that changing
+      # or against self-hosted runners later).
+      - name: Link getmaipai/shared as catalog's sibling
+        run: ln -sf "$GITHUB_WORKSPACE/shared" "$GITHUB_WORKSPACE/../shared"
+
+      # Materializes the exact worktree tools/package.json's file: path
+      # names (scripts/check.sh does this itself via its own pin block;
+      # this job runs tools/'s bun install directly, without check.sh,
+      # so it has to call ensure-tag.sh the same way). Keep this tag in
+      # sync with scripts/check.sh's own SPEC_TAG by hand - the backlog
+      # item for a shared composite action (shared/docs/BACKLOG.md,
+      # "Tooling") would remove this duplication.
+      - name: Resolve @maipai/spec's pin
+        run: bash "$GITHUB_WORKSPACE/../shared/scripts/ensure-tag.sh" spec spec-v0.1.1
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
