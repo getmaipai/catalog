@@ -21,7 +21,6 @@ export const ACCEPTED_LICENCES: ReadonlySet<string> = new Set([
   "Unlicense",
   "CC0-1.0",
   "CC-BY-4.0",
-  "CC-BY-SA-4.0",
 ]);
 
 export function licenceCheck(dir: string): { ok: boolean; errors: string[] } {
@@ -38,12 +37,14 @@ export function licenceCheck(dir: string): { ok: boolean; errors: string[] } {
   const license = typeof manifest === "object" && manifest !== null
     ? (manifest as { license?: unknown }).license
     : undefined;
-  const value = String(license);
   const errors: string[] = [];
-  if (!ACCEPTED_LICENCES.has(value)) {
+  if (license === undefined) {
+    errors.push("manifest.json has no license field");
+  } else if (typeof license !== "string" || !ACCEPTED_LICENCES.has(license)) {
+    const value = String(license);
     errors.push(`licence ${value} is not an accepted AGPL-3.0-compatible SPDX id`);
-  } else if (!value.startsWith("AGPL-3.0") && !existsSync(join(dir, "LICENSE")) && !existsSync(join(dir, "LICENSE.md"))) {
-    errors.push(`${value} package needs its LICENSE file beside manifest.json`);
+  } else if (!license.startsWith("AGPL-3.0") && !["LICENSE", "LICENSE.md", "LICENSE.txt", "LICENCE", "LICENCE.md", "LICENCE.txt", "COPYING"].some((name) => existsSync(join(dir, name)))) {
+    errors.push(`${license} package needs its LICENSE file beside manifest.json`);
   }
   return { ok: errors.length === 0, errors };
 }
