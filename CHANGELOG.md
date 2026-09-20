@@ -36,3 +36,7 @@ checklist; no release has been cut yet.
 - A CI step summary rendered from `check --json`.
 - The engine index accepts only https urls on the projects' own release
   hosts (GitHub and Hugging Face).
+- `build-index` publishes the signed engine index beside the package index,
+  so a hub verifies engine pins against the same signed site.
+- The CLA job tells a contributor how to sign and clears its note once they
+  have; `permission-diff --json` for scripts.
