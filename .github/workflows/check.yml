@@ -64,3 +64,64 @@ jobs:
         env:
           MAIPAI_STANDARDS_DIR: ${{ github.workspace }}/.github-standards
         run: bash scripts/check.sh
+
+  # Permission changes need review on pull requests, while tag runs only
+  # publish the catalog and have no pull request to annotate. Update one
+  # comment per PR so the review surface stays current instead of noisy.
+  permission-diff:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check out catalog
+        uses: actions/checkout@v4
+
+      - name: Check out PR base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install tools dependencies
+        run: cd tools && bun install --frozen-lockfile
+
+      - name: Render permission diff
+        run: cd tools && bun run src/permission-diff.ts -- "$GITHUB_WORKSPACE/base" "$GITHUB_WORKSPACE" > "$RUNNER_TEMP/permission-diff.md"
+
+      - name: Update permission-diff comment
+        uses: actions/github-script@v7
+        env:
+          DIFF_PATH: ${{ runner.temp }}/permission-diff.md
+        with:
+          script: |
+            const fs = require("node:fs");
+            const marker = "<!-- permission-diff -->";
+            const body = `${marker}\n${fs.readFileSync(process.env.DIFF_PATH, "utf8")}`;
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find((comment) => comment.body?.startsWith(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }

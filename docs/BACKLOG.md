@@ -34,9 +34,9 @@ packages landed).
       checks out pinned `std-v0.2.0` and runs `scripts/check.sh`.
 - [x] **Permission-diff tool** (M) - tools/src/permission-diff.ts,
       tested; the PR comment step is a CI item, opened below.
-- [ ] **Permission-diff PR comment** (S, CI) - a step in
-      .github/workflows/check.yml that runs the tool against the PR's
-      base and posts the Markdown once per PR.
+- [x] **Permission-diff PR comment** - the permission-diff job in
+      .github/workflows/check.yml; verified at this commit (runs on the
+      next PR).
 - [x] **Banned-API scan** (M) - tools/src/bannedApi.ts, thirteen rules,
       tested; wired into check.ts; verified at this commit.
 - [x] **Vendoring scan** (S-M) - `tools/src/vendoring.ts`, wired into
