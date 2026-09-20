@@ -1,3 +1,7 @@
+<!-- ci-verify/shared-pin: throwaway comment-only change to trigger a real
+     CI run verifying scripts/check.sh's SHARED-PIN-01 pin resolution and
+     .github/workflows/check.yml's fetch-tags checkout; PR closed unmerged
+     right after. -->
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/getmaipai/.github/main/brand/maipai-brand-logo-dark.png">
