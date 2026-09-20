@@ -113,9 +113,9 @@ Git workflow.
       `getmaipai/shared` checkout pinned to `spec-v0.1.1` at `../shared`
       (a true sibling of the catalog checkout, since `file:` deps are a
       real relative filesystem path bun resolves at install time, not
-      an env-var override like the standards checkout above) -
-      unverified against a live run as of this commit, confirm on the
-      first real CI trigger.
+      an env-var override like the standards checkout above). Verified
+      live 2026-09-20 (see the SHARED-PIN-01 entry below) - the sibling
+      checkout mechanics work; the repo is now `getmaipai/commons`.
 - [x] `@maipai/spec`'s pin moved to a per-tag worktree (SHARED-PIN-01,
       2026-09-20): `tools/package.json`'s `file:` path now names
       `../../shared-tags/spec-spec-v0.1.1/spec` directly instead of the
@@ -131,21 +131,53 @@ Git workflow.
       Bumping the pin: edit `SPEC_TAG` in `scripts/check.sh` and the
       matching `file:` path in `tools/package.json`, then a plain `bun
       install` in `tools/` to refresh `bun.lock` - `check.sh`'s own `bun
-      install --frozen-lockfile` won't do that step for you. CI's shared
-      checkout changed from a shallow single-tag `ref: spec-v0.1.1`
-      checkout to `fetch-tags: true` on `shared`'s default branch, since
-      `ensure-tag.sh` needs a real `git worktree add` against a
-      resolvable `refs/tags/spec-v0.1.1` - `actions/checkout@v4`'s own
-      `action.yml` documents `fetch-tags` defaulting to `false` (checked
-      directly), so a shallow ref-only checkout couldn't be trusted to
-      leave that ref resolvable, and `fetch-tags: true` at the default
-      shallow depth is tried first over `fetch-depth: 0`'s full history
-      (a real, growing transfer cost this repo doesn't otherwise pay) -
-      to be confirmed live immediately after this commit lands, via a
-      throwaway PR (`ci-verify/shared-pin`, closed unmerged, branch
-      deleted after) rather than assumed; a follow-up commit switches to
-      `fetch-depth: 0` if the shallow fetch doesn't leave the tag
-      resolvable for `git worktree add`.
+      install --frozen-lockfile` won't do that step for you.
+
+      **CI, verified live across two throwaway PRs (`ci-verify/shared-
+      pin`, `ci-verify/shared-pin-2`, both closed unmerged, branches
+      deleted):**
+      - PR 1 hit a real blocker unrelated to this item's own mechanics:
+        `getmaipai/shared` was private and catalog's CI had no
+        credential able to read a different private repo (confirmed:
+        `gh api repos/getmaipai/shared --jq '.private'` → `true`, `gh
+        secret list` → empty) - the FIRST PR this repo had ever had, so
+        the pre-existing bare-checkout pin design was equally untested
+        and would have hit the same wall. Owner decision: made the repo
+        public (now `getmaipai/commons`) rather than provision a token,
+        since a public catalog contributor's own CI shouldn't need a
+        credential to build.
+      - Along the way, found and fixed live (not by inspection alone):
+        `permission-diff` never checked out `getmaipai/shared` OR
+        `getmaipai/.github` at all (a gap that predates this item -
+        the old bare pin needed the same siblings this job never had),
+        `fetch-tags: true` at the default shallow depth left a tag's
+        ref resolvable but not its commit (`ensure-tag.sh` still said
+        "unknown tag"), and `.github/workflows/check.yml`'s checkout
+        steps needed to move from `getmaipai/shared` to
+        `getmaipai/commons` after the owner's rename mid-verification.
+      - PR 2, after all of the above: `permission-diff` job fully
+        green. `check` job gets all the way through `tools/` install,
+        typecheck, tests, and the 7/7-package scorecard - the
+        SHARED-PIN-01 worktree/checkout mechanics this item is about
+        are confirmed working end to end - and only fails at the
+        standards core's prose-lint step, on real, pre-existing
+        exclamation points in `CLAUDE.md`, `README.md`, and six package
+        READMEs. Not this item's bug: `std-v0.2.0` (CI's pin) correctly
+        catches what this session's own **local** `.github` checkout
+        missed, because that local checkout is 113 commits ahead of
+        `std-v0.2.0` on `main` (`git describe --tags` →
+        `std-v0.2.0-113-gb67acef`) - unpinned, so every local
+        `scripts/check.sh` run this session used whatever `main`
+        happened to be, not the tag CI actually enforces. Neither the
+        exclamation-point cleanup nor the local-checkout pin drift is
+        fixed here - both are separate findings, reported rather than
+        folded into this item's scope.
+      - Final workflow shape: both jobs check out `getmaipai/commons`
+        with `fetch-depth: 0` (the "all history for all branches and
+        tags" fallback - `fetch-tags: true` alone wasn't enough, proven
+        live) and `getmaipai/.github` at `std-v0.2.0`, then
+        `permission-diff` calls `ensure-tag.sh` directly since it runs
+        `bun install` without going through `scripts/check.sh`.
 
 ## Package-writing guide for agents
 
