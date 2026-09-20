@@ -122,12 +122,37 @@ export function checkPackage(dir: string): PackageCheckResult {
   };
 }
 
-export function checkAll(repoRoot: string): PackageCheckResult[] {
-  return findPackages(repoRoot).map(checkPackage);
+export function checkAll(repoRoot: string, onlyDirs: string[] = []): PackageCheckResult[] {
+  const packages = findPackages(repoRoot);
+  if (onlyDirs.length === 0) return packages.map(checkPackage);
+
+  const relativeDirs = new Set(packages.map((dir) => dir.slice(repoRoot.length + 1)));
+  for (const onlyDir of onlyDirs) {
+    if (!relativeDirs.has(onlyDir)) throw new Error(`no package at ${onlyDir}`);
+  }
+  return packages.filter((dir) => onlyDirs.includes(dir.slice(repoRoot.length + 1))).map(checkPackage);
 }
 
 function main(): void {
-  const results = checkAll(REPO_ROOT);
+  const onlyDirs: string[] = [];
+  for (let index = 2; index < process.argv.length; index += 1) {
+    if (process.argv[index] === "--only") {
+      const onlyDir = process.argv[++index];
+      if (!onlyDir) {
+        console.error("--only requires a directory");
+        process.exit(1);
+      }
+      onlyDirs.push(onlyDir);
+    }
+  }
+
+  let results: PackageCheckResult[];
+  try {
+    results = checkAll(REPO_ROOT, onlyDirs);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  }
   if (process.argv.includes("--json")) {
     console.log(JSON.stringify(toJsonReport(results, REPO_ROOT), null, 2));
     if (results.some((result) => !result.passing)) process.exit(1);

@@ -24,7 +24,8 @@ from the maintainer only.
   (gitleaks, the PII wordlist, the prose lint, the licence file).
   `cd tools && bun run check` runs the package half alone. What
   `check` prints is what a maintainer reads first; a red line there
-  is answered before a human reviews anything.
+  is answered before a human reviews anything. `cd tools && bun run check
+  -- --only plugins/<category>/<id>` checks one package while you work on it.
 - **Still to come, not yet enforced:** the permission-diff comment on
   a PR, recipe conformance on both interpreters, the speech lint, and
   screenshot generation with vision review of store images. They are

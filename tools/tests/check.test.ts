@@ -92,6 +92,17 @@ describe("checkAll", () => {
     expect(results.length).toBe(2);
     expect(results.every((r) => r.passing === false)).toBe(true);
   });
+
+  test("--only checks the requested package from two discovered packages", () => {
+    writeManifest(join(repoRoot, "apps", "one"), "one");
+    writeManifest(join(repoRoot, "companions", "two"), "two");
+    const results = checkAll(repoRoot, ["companions/two"]);
+    expect(results.map((result) => result.dir)).toEqual([join(repoRoot, "companions", "two")]);
+  });
+
+  test("--only rejects an unknown package directory", () => {
+    expect(() => checkAll(repoRoot, ["apps/missing"])).toThrow("no package at apps/missing");
+  });
 });
 
 describe("toJsonReport", () => {
@@ -118,5 +129,24 @@ describe("toJsonReport", () => {
     expect(Array.isArray(report.packages)).toBe(true);
     expect(typeof report.passing).toBe("number");
     expect(typeof report.total).toBe("number");
+  });
+
+  test("--only with --json reports one package", async () => {
+    const packages = findPackages(join(import.meta.dir, "..", ".."));
+    const onlyDir = packages[0]!.slice(join(import.meta.dir, "..", "..").length + 1);
+    const proc = Bun.spawn(["bun", "run", "src/check.ts", "--only", onlyDir, "--json"], { cwd: join(import.meta.dir, ".."), stdout: "pipe", stderr: "pipe" });
+    const output = await new Response(proc.stdout).text();
+    await proc.exited;
+    const report = JSON.parse(output) as { total: number };
+    expect(proc.exitCode).toBe(0);
+    expect(report.total).toBe(1);
+  });
+
+  test("an unknown --only directory exits 1", async () => {
+    const proc = Bun.spawn(["bun", "run", "src/check.ts", "--only", "apps/not-real"], { cwd: join(import.meta.dir, ".."), stdout: "pipe", stderr: "pipe" });
+    const error = await new Response(proc.stderr).text();
+    await proc.exited;
+    expect(proc.exitCode).toBe(1);
+    expect(error).toContain("no package at apps/not-real");
   });
 });
