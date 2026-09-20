@@ -49,8 +49,7 @@ Git workflow.
 - [x] Repo created, public, with LICENSE (AGPL-3.0), NOTICE, this design
       record, and `scripts/check.sh` pinned to `@maipai/standards`
       std-v0.2.0.
-- [x] `tools/` (lint, pack, sign, index-builder, scorecard, check,
-      build-index): built (session-d-packages-and-store.md step 6).
+- [x] `tools/` (manifest and recipe lint, the scorecard, pack, sign, the package index builder and `build-index`, the engine index builder, the vendoring, licence and banned-API scans, the permission diff, the CLA check, and the `check` CLI that runs the lint, scorecard and scans over every package, with `--json` and `--only`): built (session-d-packages-and-store.md step 6).
       `scripts/check.sh` runs the full suite, then `check` against every
       package in the repo.
 - [x] `AGENTS.md` (repo orientation, org standards pointer) added
