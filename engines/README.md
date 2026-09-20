@@ -24,4 +24,5 @@ validates the source against its schema and writes the signed envelope
 (`{ signed: { type, version, expires, engines }, signatures }`, the
 same shape as the package index) that the release attaches. The release
 key is the catalog's (see `docs/dev.md`, signing); a local build uses
-the dev signers.
+the dev signers. `bun run build-index` publishes the signed envelope at
+`engines/index.json` on the site.

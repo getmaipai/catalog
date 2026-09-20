@@ -54,7 +54,8 @@ packages landed).
       (schema validation, duplicate-pin refusal, the signed envelope in
       the package index's shape with a thirty-day expiry) and its test;
       `bun run src/engine-index.ts -- <outFile>` writes the
-      `engine-index.json` the release attaches. Publishing it as a
+      `engine-index.json` the release attaches. Published by `build-index`
+      beside the package index; verified at this commit. Publishing it as a
       release asset joins the release signing item above; the Stack
       reads `releases/latest/download/engine-index.json`.
 - [ ] **Model index** (S) - the same shape for `models/` once the first

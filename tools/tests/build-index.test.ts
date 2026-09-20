@@ -25,6 +25,14 @@ function writeFixturePackage(dir: string, overrides: Record<string, unknown> = {
   writeFileSync(join(dir, "README.md"), "# Fixture\n");
 }
 
+function writeFixtureEngineIndex(repoDir: string): void {
+  mkdirSync(join(repoDir, "engines"), { recursive: true });
+  writeFileSync(join(repoDir, "engines", "index.json"), JSON.stringify({
+    version: "1",
+    engines: [{ name: "llama", tag: "b1", platform: "linux", arch: "x64", url: "https://github.com/example/llama.tar.gz", sha256: "a".repeat(64), size: 1, licence: "MIT" }],
+  }));
+}
+
 describe("ensureDevSigners", () => {
   test("generates two distinct keypairs on first use", () => {
     const keysDir = join(workDir, "keys");
@@ -44,6 +52,28 @@ describe("ensureDevSigners", () => {
 });
 
 describe("buildIndex", () => {
+  test("publishes and signs the engine index beside the package index", async () => {
+    const repoDir = join(workDir, "repo");
+    const pkgDir = join(repoDir, "plugins", "utilities", "fixture");
+    writeFixturePackage(pkgDir);
+    writeFixtureEngineIndex(repoDir);
+    const signers = ensureDevSigners(join(workDir, "keys"));
+    const built = await buildIndex([{ dir: pkgDir, targetPath: "plugins/utilities/fixture/0.1.0" }], join(workDir, "out"), signers);
+    const enginePath = join(built.outDir, "engines", "index.json");
+    expect(existsSync(enginePath)).toBe(true);
+    const engine = JSON.parse(readFileSync(enginePath, "utf-8"));
+    expect(verifyEnvelope(engine, [readFileSync(signers.primary.publicKeyPath, "utf-8")])).toBe(true);
+    expect(engine.signed.type).toBe("engine-index");
+  });
+
+  test("succeeds without an engine source and writes no engine index", async () => {
+    const pkgDir = join(workDir, "repo", "plugins", "utilities", "fixture");
+    writeFixturePackage(pkgDir);
+    const signers = ensureDevSigners(join(workDir, "keys"));
+    const built = await buildIndex([{ dir: pkgDir, targetPath: "plugins/utilities/fixture/0.1.0" }], join(workDir, "out"), signers);
+    expect(existsSync(join(built.outDir, "engines", "index.json"))).toBe(false);
+  });
+
   test("packs and signs a real package, producing a targets entry a hub install could verify against", async () => {
     const pkgDir = join(workDir, "src", "fixture");
     writeFixturePackage(pkgDir, { permissions: ["net:example.com"], channel: "beta" });

@@ -8,7 +8,7 @@
 // bundled default set is installed through the identical verify/unpack
 // path a real store install uses, never a shortcut copy).
 import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
-import { join, relative } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { homedir } from "node:os";
 import { execFileSync } from "node:child_process";
 import { generateKeyPair, type KeyPairFiles } from "./sign";
@@ -30,6 +30,17 @@ export interface BuiltIndex {
   timestampPath: string;
   /** targetPath -> the tarball actually written for it, under outDir. */
   tarballs: Record<string, string>;
+}
+
+function findEngineIndexSource(pkgDir: string): string | null {
+  let dir = pkgDir;
+  while (true) {
+    const candidate = join(dir, "engines", "index.json");
+    if (existsSync(candidate)) return candidate;
+    const parent = dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
 }
 
 interface Manifest {
@@ -159,6 +170,14 @@ export async function buildIndex(
   const timestamp = buildTimestamp(targetsPath, signers.primary, version);
   const timestampPath = join(outDir, "timestamp.json");
   writeEnvelope(timestamp, timestampPath);
+
+  const engineSourcePath = packages[0] === undefined ? null : findEngineIndexSource(packages[0].dir);
+  if (engineSourcePath !== null) {
+    const { buildEngineIndex, readEngineIndexSource } = await import("./engine-index");
+    const engineOutDir = join(outDir, "engines");
+    mkdirSync(engineOutDir, { recursive: true });
+    writeEnvelope(buildEngineIndex(readEngineIndexSource(engineSourcePath), signers.primary, version), join(engineOutDir, "index.json"));
+  }
 
   return { outDir, rootPath, targetsPath, timestampPath, tarballs };
 }
