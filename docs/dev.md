@@ -116,6 +116,36 @@ Git workflow.
       an env-var override like the standards checkout above) -
       unverified against a live run as of this commit, confirm on the
       first real CI trigger.
+- [x] `@maipai/spec`'s pin moved to a per-tag worktree (SHARED-PIN-01,
+      2026-09-20): `tools/package.json`'s `file:` path now names
+      `../../shared-tags/spec-spec-v0.1.1/spec` directly instead of the
+      shared sibling checkout, and `scripts/check.sh` resolves it via
+      `getmaipai/shared`'s own `scripts/ensure-tag.sh` before install -
+      the mutable-checkout bug that replaced (one session's tag change
+      under `../shared` silently detaching every other consumer reading
+      it) is `home/docs/dev.md`'s "Pins moved to per-tag worktrees", the
+      same day. `scripts/check.sh` also checks that `tools/package.json`'s
+      `file:` path actually names the same tag as its own `SPEC_TAG` (a
+      review caught the two being able to silently drift otherwise, since
+      the worktree-version check alone never reads `package.json`).
+      Bumping the pin: edit `SPEC_TAG` in `scripts/check.sh` and the
+      matching `file:` path in `tools/package.json`, then a plain `bun
+      install` in `tools/` to refresh `bun.lock` - `check.sh`'s own `bun
+      install --frozen-lockfile` won't do that step for you. CI's shared
+      checkout changed from a shallow single-tag `ref: spec-v0.1.1`
+      checkout to `fetch-tags: true` on `shared`'s default branch, since
+      `ensure-tag.sh` needs a real `git worktree add` against a
+      resolvable `refs/tags/spec-v0.1.1` - `actions/checkout@v4`'s own
+      `action.yml` documents `fetch-tags` defaulting to `false` (checked
+      directly), so a shallow ref-only checkout couldn't be trusted to
+      leave that ref resolvable, and `fetch-tags: true` at the default
+      shallow depth is tried first over `fetch-depth: 0`'s full history
+      (a real, growing transfer cost this repo doesn't otherwise pay) -
+      to be confirmed live immediately after this commit lands, via a
+      throwaway PR (`ci-verify/shared-pin`, closed unmerged, branch
+      deleted after) rather than assumed; a follow-up commit switches to
+      `fetch-depth: 0` if the shallow fetch doesn't leave the tag
+      resolvable for `git worktree add`.
 
 ## Package-writing guide for agents
 
