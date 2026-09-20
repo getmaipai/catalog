@@ -39,7 +39,7 @@ packages landed).
       `check.ts`; verified at 0a05307.
 - [ ] **Screenshot generation + vision review of store images** (M-L) - not
       in `tools/src/`; no screenshot pipeline exists in this repo at all.
-- [ ] **Licence check** (S-M) - not in `tools/src/`.
+- [x] **Licence check** (S) - tools/src/licence.ts, tested; wired into check.ts by a follow-up item.
 - [ ] **Real online timestamp/release signing key** (M) - `sign.ts` only
       has a local dev keypair path; no tag-triggered publish to a real key.
 - [ ] **CLA-signature bot: check a contributor signed `ASSIGNMENT.md` once,
