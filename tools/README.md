@@ -1,33 +1,21 @@
-# tools/
+# tools
 
-The catalog's own tooling, `@maipai/catalog-tools`. A `bun install` here
-pulls its dependencies; `bun run check` is what a contributor runs before
-proposing a package, and what CI runs on every PR.
+The catalog's own tooling, run by `scripts/check.sh` and by CI, uses one rule set and never a second copy.
 
-- `src/lint.ts`: validates a package directory's `manifest.json` (and,
-  for tier-0 plugins, its `recipe.json`) against `../schema/`, and checks
-  the rest of the bronze bar: five or more routing examples, a privacy
-  row per `net:` permission, banned trademark vocabulary, README,
-  CHANGELOG, and a `quality_scale.yaml`.
-- `src/scorecard.ts`: reads a package's `quality_scale.yaml` and reports
-  how many bronze/silver/gold criteria are actually met, not just claimed.
-- `src/pack.ts`: packs a package directory into a deterministic gzipped
-  tarball (same content, same bytes, on any machine) and its sha256.
-- `src/sign.ts`: Ed25519 keypair generation and raw sign/verify, native
-  `node:crypto`.
-- `src/index-builder.ts`: builds and signs the TUF-shaped `root.json`,
-  `targets.json`, and `timestamp.json`, each carrying a monotonic
-  `version` for rollback detection.
-- `src/check.ts`: the CLI. Finds every package in the repo, runs lint and
-  scorecard on each, and reports pass/fail. `bun run check`.
-- `src/build-index.ts`: the CLI that ties pack, sign, and index-builder
-  together for a real set of packages: packs and signs every discovered
-  package and writes the tarballs plus a signed root/targets/timestamp
-  index to an output directory. `bun run build-index -- <outDir>`. Used
-  by the public CI workflow (a tag-triggered publish) and by `home`'s own
-  bundled-package refresh script, each with its own signing keys.
+| Module | What it does | Run |
+|---|---|---|
+| `bannedApi.ts` | Defines patterns for calls that package handlers cannot use inside their sandbox. | library |
+| `build-index.ts` | Ties package packing, signing, and index building into the signed artifact a store install needs. | `bun run build-index` |
+| `check.ts` | Walks every package, runs lint and scorecard checks, and prints one report. | `bun run check -- --json` or `bun run check -- --only <id>` |
+| `cla.ts` | Loads the signed maintainer and contributor assignment records. | `bun run cla` |
+| `engine-index.ts` | Validates and publishes the signed engine index used for installed and available engines. | `bun run engine-index` |
+| `index-builder.ts` | Builds the TUF-shaped signed root, targets, and timestamp metadata with rollback and freshness information. | library |
+| `licence.ts` | Defines accepted licences and checks package licence declarations. | library |
+| `lint.ts` | Validates package manifests and recipes against the schema and checks the bronze package requirements. | library |
+| `pack.ts` | Packs a package directory into a deterministic gzipped tarball and computes its SHA-256 digest. | `bun run pack` |
+| `permission-diff.ts` | Compares package permissions and privacy data between catalog revisions. | `bun run permission-diff` |
+| `scorecard.ts` | Reads a package quality scale and reports the bronze, silver, and gold criteria it meets. | library |
+| `sign.ts` | Generates Ed25519 keypairs and signs or verifies data with native `node:crypto`. | library |
+| `vendoring.ts` | Scans source trees for vendored code and ownership or minification markers. | library |
 
-Run `bun test` for the tool suite itself, `bunx tsc --noEmit` to
-typecheck. See `../docs/dev.md` for the repo's own status and
-`docs/PACKAGES.md` (in `.github`) for the full package contract these
-tools enforce.
+`bun test` runs `tests/`, one file per module.
