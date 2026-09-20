@@ -61,10 +61,10 @@ packages landed).
       with role, minimum profile, quality band and the pinned download).
 - [ ] **Real online timestamp/release signing key** (M) - `sign.ts` only
       has a local dev keypair path; no tag-triggered publish to a real key.
-- [ ] **CLA-signature bot: check a contributor signed `ASSIGNMENT.md` once,
-      then gate future PRs automatically** (M) - `ASSIGNMENT.md` itself
-      says "not yet wired up"; nothing in `tools/` reads or records a
-      signature.
+- [x] **CLA-signature bot: check a contributor signed `ASSIGNMENT.md` once,
+      then gate future PRs automatically** (M) - `signers.json` plus
+      `tools/src/cla.ts` and the `cla` job; verified at this commit (the
+      legal text of `ASSIGNMENT.md` stays the owner's).
 
 ## Packages: plugins (Tier 0/1)
 

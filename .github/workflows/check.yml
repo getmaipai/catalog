@@ -19,6 +19,19 @@ permissions:
   contents: read
 
 jobs:
+  cla:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out catalog
+        uses: actions/checkout@v4
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Check contributor CLA
+        run: cd tools && bun run src/cla.ts -- "${{ github.event.pull_request.user.login }}"
+
   check:
     runs-on: ubuntu-latest
     steps:
