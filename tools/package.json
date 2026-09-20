@@ -14,7 +14,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@maipai/spec": "file:../../shared-tags/spec-spec-v0.1.1/spec",
+    "@maipai/spec": "file:../../commons-tags/spec-spec-v0.1.1/spec",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "tar": "^7.5.22"
