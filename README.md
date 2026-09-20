@@ -1,3 +1,6 @@
+<!-- ci-verify/shared-pin-2: throwaway comment-only change verifying
+     check and permission-diff against the now-public getmaipai/commons
+     repo (SHARED-PIN-01); PR closed unmerged right after. -->
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/getmaipai/.github/main/brand/maipai-brand-logo-dark.png">
