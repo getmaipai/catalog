@@ -1,6 +1,6 @@
 // The catalog's own package lint (session-d-packages-and-store.md step
 // 6, docs/PACKAGES.md's bronze bar): manifest + recipe validation
-// against schema/ (mirrored from home/spec/), five-plus routing
+// against the pinned @maipai/spec's own schemas/, five-plus routing
 // examples, a privacy row per net: permission, banned trademark
 // vocabulary and platform names in ids/names, and the rest of bronze
 // (README, CHANGELOG, quality_scale.yaml with every bronze line met).
@@ -11,38 +11,42 @@ import { join } from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
-const SCHEMA_DIR = join(import.meta.dir, "..", "..", "schema");
+// spec-v0.1.0/RF-05 (catalog step 6): schema/ used to be a maintainer-
+// refreshed mirror of home/spec's own schemas (scripts/refresh-schema.sh,
+// deleted); now @maipai/spec is a real pinned dependency and its
+// schemas/ is read directly - no local copy to fall out of date, no
+// refresh step to remember to run before a release.
+const SCHEMA_DIR = join(import.meta.dir, "..", "node_modules", "@maipai", "spec", "schemas");
+// The one schema @maipai/spec's own manifest.schema.json $refs outside
+// itself (data_sources[] -> PrivacyRow, by the full cross-repo URL, not
+// a bare filename - spec/schemas/manifest.schema.json's own $ref reads
+// literally "https://getmaipai.github.io/.github/standards/schemas/
+// privacy-row.schema.json"). Resolved from the sibling @maipai/standards
+// checkout this repo's own check.sh already requires for the standards
+// core gate.
+const STANDARDS_SCHEMAS_DIR = join(
+  process.env.MAIPAI_STANDARDS_DIR ?? join(import.meta.dir, "..", "..", "..", ".github"),
+  "standards",
+  "schemas",
+);
 
-// One shared Ajv instance: schema/manifest.schema.json's own same-directory
-// $refs (privacy-row.schema.json, settings-key.schema.json) resolve
-// through addSchema() below, the same "every $id known up front" approach
-// home/backend/src/lib/plugins.ts's own Ajv2020 instance would need if it
-// validated cross-file refs (it doesn't - manifest.args is package-
-// specific and has none). `strict: false`: manifest.schema.json's own
-// `args`/`cache`/`warm` fields are intentionally open-ended
-// (`additionalProperties: true` or unconstrained), which Ajv's strict
-// mode would otherwise warn on as "possibly a typo."
+// One shared Ajv instance. Every schema below carries its own real,
+// accurate $id (spec-v0.1.1 fixed these to say shared/spec, not
+// home/spec) and manifest.schema.json's $refs (settings-key.schema.json,
+// bare - same directory; the standards PrivacyRow, the full URL above)
+// resolve automatically the moment the referenced schema is registered
+// under that exact $id - no manual key computation needed, unlike the
+// old schema/ mirror's bare-filename rewrite trick.
+// `strict: false`: manifest.schema.json's own `args`/`cache`/`warm`
+// fields are intentionally open-ended (`additionalProperties: true` or
+// unconstrained), which Ajv's strict mode would otherwise warn on as
+// "possibly a typo."
 const ajv = new Ajv2020({ strict: false, allErrors: true });
 addFormats(ajv);
 
-const manifestSchema = JSON.parse(readFileSync(join(SCHEMA_DIR, "manifest.schema.json"), "utf-8")) as { $id: string };
-// A bare relative $ref ("privacy-row.schema.json") resolves, per the JSON
-// Schema spec, against the ENCLOSING schema's own $id - here that means
-// joining it onto manifest.schema.json's own $id
-// (".../home/spec/schemas/manifest.schema.json"), producing
-// ".../home/spec/schemas/privacy-row.schema.json". The referenced file
-// itself still carries its ORIGINAL cross-repo $id
-// (".../.github/standards/schemas/privacy-row.schema.json", copied
-// verbatim by scripts/refresh-schema.sh) - registering it under either
-// that $id or its own bare filename left the ref Ajv actually computes
-// unmatched, throwing "can't resolve reference" the moment
-// manifest.schema.json compiled. Registering it under the SAME resolved
-// key Ajv itself will look up sidesteps needing to rewrite the file's own
-// $id at all.
-for (const file of ["privacy-row.schema.json", "settings-key.schema.json"]) {
-  const resolvedKey = new URL(file, manifestSchema.$id).toString();
-  ajv.addSchema(JSON.parse(readFileSync(join(SCHEMA_DIR, file), "utf-8")), resolvedKey);
-}
+ajv.addSchema(JSON.parse(readFileSync(join(SCHEMA_DIR, "settings-key.schema.json"), "utf-8")));
+ajv.addSchema(JSON.parse(readFileSync(join(STANDARDS_SCHEMAS_DIR, "privacy-row.schema.json"), "utf-8")));
+const manifestSchema = JSON.parse(readFileSync(join(SCHEMA_DIR, "manifest.schema.json"), "utf-8"));
 const validateManifest = ajv.compile(manifestSchema);
 const validateRecipe = ajv.compile(JSON.parse(readFileSync(join(SCHEMA_DIR, "recipe.schema.json"), "utf-8")));
 

@@ -5,6 +5,18 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+SPEC_PIN="0.1.1"
+SHARED_DIR="${MAIPAI_SHARED_DIR:-../shared}"
+if [ ! -f "$SHARED_DIR/spec/package.json" ]; then
+  echo "getmaipai/shared is missing at $SHARED_DIR (set MAIPAI_SHARED_DIR); tools/ imports @maipai/spec from its spec/ workspace."
+  exit 1
+fi
+SPEC_VERSION="$(bun -e 'console.log(JSON.parse(await Bun.file(process.argv[1]).text()).version)' "$SHARED_DIR/spec/package.json")"
+if [ "$SPEC_VERSION" != "$SPEC_PIN" ]; then
+  echo "@maipai/spec at $SHARED_DIR/spec is version $SPEC_VERSION; this repo pins spec-v$SPEC_PIN. Check out the tag there or move the pin here."
+  exit 1
+fi
+
 echo "== tools: install"
 (cd tools && bun install --frozen-lockfile)
 

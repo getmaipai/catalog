@@ -18,7 +18,9 @@ packages landed).
 ## Supply-chain tooling (`tools/`)
 
 - [x] **Lint** (`tools/src/lint.ts`, tested) - manifest/recipe shape
-      checking.
+      checking. Reads schemas from the pinned `@maipai/spec` (2026-09-20,
+      refocus step 6) rather than the deleted `schema/` mirror; see
+      `docs/dev.md`'s Step 0 status.
 - [x] **Pack** (`tools/src/pack.ts`, tested)
 - [x] **Sign** (`tools/src/sign.ts`, tested) - local dev keypair only; the
       real offline maintainer release key doesn't exist yet (Jesse's own

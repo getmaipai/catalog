@@ -111,6 +111,33 @@ jobs:
           ref: std-v0.2.0
           path: .github-standards
 
+      # tools/package.json pins @maipai/spec as "file:../../shared/spec" -
+      # a real relative filesystem path bun resolves at install time, not
+      # an env-var override like MAIPAI_STANDARDS_DIR above, so the
+      # checkout has to land at that exact path rather than anywhere
+      # convenient: two levels up from tools/ is catalog's own parent
+      # directory, so `shared` needs to be catalog's true sibling here,
+      # not nested inside this checkout the way .github-standards is.
+      # actions/checkout@v4 refuses any `path` that resolves outside
+      # $GITHUB_WORKSPACE (confirmed against its own source, not just
+      # docs), so the sibling relationship can't come from `path:
+      # ../shared` directly - checked out nested instead, then
+      # symlinked one level up, which actions/checkout's own guard
+      # doesn't touch (it's a plain shell command, not a second
+      # checkout). Pinned to spec-v0.1.1, the exact tag
+      # tools/package.json and docs/dev.md name - never shared's own
+      # main, for the same reason the standards checkout above is
+      # pinned.
+      - name: Check out @maipai/spec (spec-v0.1.1)
+        uses: actions/checkout@v4
+        with:
+          repository: getmaipai/shared
+          ref: spec-v0.1.1
+          path: shared
+
+      - name: Link getmaipai/shared as catalog's sibling
+        run: ln -s "$GITHUB_WORKSPACE/shared" "$GITHUB_WORKSPACE/../shared"
+
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
         with:

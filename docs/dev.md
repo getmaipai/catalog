@@ -27,7 +27,6 @@ integrations/<id>/
 models/<id>/
 wakewords/<id>/
 voices/<id>/
-schema/          # mirrored from home/spec/, not hand-edited here
 tools/           # lint, pack, sign, index, scorecard, the `check` CLI
 ASSIGNMENT.md    # the copyright assignment contributors sign
 CONTRIBUTING.md
@@ -84,11 +83,39 @@ Git workflow.
       `tutor`) are still in `home` - not yet at bronze (no
       README/CHANGELOG/quality_scale.yaml/smoke declaration), and not
       this session's packages to complete (see `home`'s own
-      `spec/tests/ts/package-bronze.test.ts` for the ownership map).
+      `backend/tests/package-bronze.test.ts` for the ownership map).
       They move here once their owning session brings them to bronze.
 - [x] [`docs/BACKLOG.md`](BACKLOG.md) added (2026-09-06) - the scannable
       what's-built/what's-missing list per `getmaipai/CLAUDE.md`'s Backlog
       and status standard; feeds the org's status dashboard.
+- [x] `schema/` deleted, `@maipai/spec` pinned instead (2026-09-20,
+      refocus step 6). `schema/` was a maintainer-refreshed copy of five
+      of `home/spec`'s schemas (`scripts/refresh-schema.sh`, deleted with
+      it); now that spec moved to `getmaipai/shared` and ships as a real
+      `file:` dependency (`tools/package.json`), `tools/src/lint.ts`
+      reads `manifest.schema.json`/`recipe.schema.json`/
+      `settings-key.schema.json` straight from the installed package's
+      own `schemas/`, no local copy to fall stale or a refresh step to
+      remember before a release. The one cross-repo `$ref`
+      (`manifest.schema.json`'s `data_sources[]` → `@maipai/standards`'
+      `PrivacyRow`) resolves from the sibling `getmaipai/.github`
+      checkout this repo's `check.sh` already requires
+      (`MAIPAI_STANDARDS_DIR`, `../.github` default) - every schema now
+      registers under its own real `$id`, so Ajv's built-in `$ref`
+      resolution does the work the old mirror's manual bare-filename
+      rewrite used to. `result.schema.json` was never actually read by
+      `lint.ts`; not carried forward. `scripts/check.sh` gained a
+      `SPEC_PIN` check (`$SHARED_DIR/spec/package.json`'s version must
+      equal `0.1.1`), matching `home`'s own `CORE_PIN`/`UI_PIN`/
+      `SPEC_PIN` pattern - the "honesty of the pin" contract every
+      `shared` consumer carries (`shared/docs/dev.md`, "How a consumer
+      pins a workspace"). CI (`.github/workflows/check.yml`) gained a
+      `getmaipai/shared` checkout pinned to `spec-v0.1.1` at `../shared`
+      (a true sibling of the catalog checkout, since `file:` deps are a
+      real relative filesystem path bun resolves at install time, not
+      an env-var override like the standards checkout above) -
+      unverified against a live run as of this commit, confirm on the
+      first real CI trigger.
 
 ## Package-writing guide for agents
 

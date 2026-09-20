@@ -26,8 +26,6 @@ the current step-0 checklist.
 - `plugins/`, `skills/`, `apps/`, `companions/`, `integrations/`,
   `models/`, `wakewords/`, `voices/`: one directory per package, one
   manifest format for every kind.
-- `schema/`: mirrored from `home/spec/`, the shapes every package's
-  manifest and recipe conform to.
 - `tools/`: the lint, pack, sign, index, and scorecard tooling, and the
   `check` CLI a contributor runs before proposing a package.
 
