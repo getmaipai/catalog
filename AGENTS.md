@@ -30,4 +30,4 @@ pass, not just its own tests). `bash scripts/check.sh` from the repo root
 runs `tools/`'s own typecheck and tests, then that check, then the pinned
 `@maipai/standards` core (needs a sibling `getmaipai/.github` checkout,
 `../.github` by default, override with `MAIPAI_STANDARDS_DIR`, pinned to
-std-v0.2.0).
+std-v0.3.0; the gate resolves it through `../.github-tags/std-v0.3.0`).

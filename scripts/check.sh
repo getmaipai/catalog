@@ -78,13 +78,16 @@ echo "== tools: tests"
 echo "== tools: check (lint + scorecard, every package)"
 (cd tools && bun run check)
 
-STANDARDS_DIR="${MAIPAI_STANDARDS_DIR:-../.github}"
-if [ ! -d "$STANDARDS_DIR/standards" ]; then
-  echo "missing @maipai/standards checkout at $STANDARDS_DIR (pin std-v0.2.0)"
+STANDARDS_REPO="${MAIPAI_STANDARDS_DIR:-../.github}"
+STD_TAG="std-v0.3.0"
+STANDARDS_DIR="$(bash "$STANDARDS_REPO/standards/bin/ensure-tag.sh" "$STD_TAG")"
+export MAIPAI_STANDARDS_DIR="$STANDARDS_DIR"
+if [ "$(cat "$STANDARDS_DIR/standards/VERSION")" != "${STD_TAG#std-v}" ]; then
+  echo "@maipai/standards at $STANDARDS_DIR is $(cat "$STANDARDS_DIR/standards/VERSION"), but the tag is $STD_TAG"
   exit 1
 fi
 
-echo "== standards core (std-v0.2.0)"
+echo "== standards core ($STD_TAG)"
 bash "$STANDARDS_DIR/standards/bin/check-core.sh" "$(pwd)"
 
 echo "== all checks passed"
