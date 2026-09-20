@@ -50,6 +50,17 @@ describe("checkPackage", () => {
     expect(result.passing).toBe(false);
     expect(result.lintErrors.length).toBeGreaterThan(0);
   });
+
+  test("a package with a vendor/ directory fails the vendoring scan", () => {
+    const dir = join(repoRoot, "apps", "with-vendor");
+    writeManifest(dir, "with-vendor");
+    mkdirSync(join(dir, "vendor"), { recursive: true });
+    writeFileSync(join(dir, "vendor", "lib.js"), "var x = 1;");
+    const result = checkPackage(dir);
+    expect(result.passing).toBe(false);
+    expect(result.vendoringErrors.length).toBeGreaterThan(0);
+    expect(result.vendoringErrors.some((e) => e.includes("vendored directory vendor"))).toBe(true);
+  });
 });
 
 describe("checkAll", () => {

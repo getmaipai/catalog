@@ -35,7 +35,8 @@ packages landed).
       as a CI gate; no code for it in `tools/src/`.
 - [ ] **Banned-API scan** (M) - same: promised in `CONTRIBUTING.md`, not in
       `tools/src/`.
-- [ ] **Vendoring scan** (S-M) - not in `tools/src/`.
+- [x] **Vendoring scan** (S-M) - `tools/src/vendoring.ts`, wired into
+      `check.ts`; verified at 0a05307.
 - [ ] **Screenshot generation + vision review of store images** (M-L) - not
       in `tools/src/`; no screenshot pipeline exists in this repo at all.
 - [ ] **Licence check** (S-M) - not in `tools/src/`.

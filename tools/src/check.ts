@@ -11,6 +11,7 @@ import { readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { lintPackage } from "./lint";
 import { scorecard } from "./scorecard";
+import { vendoringScan } from "./vendoring";
 
 const REPO_ROOT = join(import.meta.dir, "..", "..");
 const KIND_DIRS = ["plugins", "skills", "apps", "companions", "integrations", "models", "wakewords", "voices"];
@@ -66,17 +67,20 @@ export interface PackageCheckResult {
   dir: string;
   lintErrors: string[];
   scorecardMissing: string[];
+  vendoringErrors: string[];
   passing: boolean;
 }
 
 export function checkPackage(dir: string): PackageCheckResult {
   const lint = lintPackage(dir);
   const score = scorecard(dir);
+  const vendoring = vendoringScan(dir);
   return {
     dir,
     lintErrors: lint.errors,
     scorecardMissing: score.missing,
-    passing: lint.ok && score.passing,
+    vendoringErrors: vendoring.errors,
+    passing: lint.ok && score.passing && vendoring.ok,
   };
 }
 
@@ -102,6 +106,7 @@ function main(): void {
     console.log(`FAIL  ${relDir}`);
     for (const error of result.lintErrors) console.log(`        lint: ${error}`);
     for (const missing of result.scorecardMissing) console.log(`        scorecard: ${missing}`);
+    for (const error of result.vendoringErrors) console.log(`        vendoring: ${error}`);
   }
 
   console.log(`\n${results.length - failing}/${results.length} packages passing`);
