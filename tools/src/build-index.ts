@@ -177,6 +177,11 @@ export async function buildIndex(
     const engineOutDir = join(outDir, "engines");
     mkdirSync(engineOutDir, { recursive: true });
     writeEnvelope(buildEngineIndex(readEngineIndexSource(engineSourcePath), signers.primary, version), join(engineOutDir, "index.json"));
+    const modelSourcePath = join(engineSourcePath, "..", "..", "models", "index.json");
+    if (existsSync(modelSourcePath)) {
+      const { buildModelIndex, readModelIndexSource } = await import("./model-index");
+      writeEnvelope(buildModelIndex(readModelIndexSource(modelSourcePath), signers.primary, version), join(outDir, "model-index.json"));
+    }
   }
 
   return { outDir, rootPath, targetsPath, timestampPath, tarballs };

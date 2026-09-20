@@ -60,7 +60,7 @@ packages landed).
       beside the package index; verified at this commit. Publishing it as a
       release asset joins the release signing item above; the Stack
       reads `releases/latest/download/engine-index.json`.
-- [ ] **Model index** (S) - the same shape for `models/` once the first
+- [x] **Model index** (S, verified at this commit) - the same shape for `models/` seeded from the Stack's eight shipped pins once the first
       model package lands: the Stack already reads
       `releases/latest/download/model-index.json` (`{ version, models }`
       with role, minimum profile, quality band and the pinned download).
