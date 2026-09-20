@@ -260,6 +260,21 @@ jobs:
       - name: Resolve @maipai/spec's pin
         run: bash "$GITHUB_WORKSPACE/../shared/scripts/ensure-tag.sh" spec spec-v0.1.1
 
+      # tools/src/lint.ts (permission-diff.ts's own dependency) resolves
+      # manifest.schema.json's cross-repo $ref to @maipai/standards'
+      # PrivacyRow from MAIPAI_STANDARDS_DIR (default a sibling ../.github,
+      # same as scripts/check.sh) - this job never checked that out
+      # either, found live (PR 2's run: ENOENT on privacy-row.schema.json
+      # under a nonexistent .github/standards/schemas). Pinned to
+      # std-v0.2.0, matching the check job above and every other repo's
+      # own pin.
+      - name: Check out @maipai/standards (std-v0.2.0)
+        uses: actions/checkout@v4
+        with:
+          repository: getmaipai/.github
+          ref: std-v0.2.0
+          path: .github-standards
+
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -269,6 +284,8 @@ jobs:
         run: cd tools && bun install --frozen-lockfile
 
       - name: Render permission diff
+        env:
+          MAIPAI_STANDARDS_DIR: ${{ github.workspace }}/.github-standards
         run: cd tools && bun run src/permission-diff.ts -- "$GITHUB_WORKSPACE/base" "$GITHUB_WORKSPACE" > "$RUNNER_TEMP/permission-diff.md"
 
       - name: Update permission-diff comment
