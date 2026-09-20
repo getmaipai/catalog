@@ -100,6 +100,8 @@ plugin skill and
 in `.github` for the manifest format and the bronze-tier definition of
 done; run this repo's own `tools/` (lint, pack, sign, index, scorecard,
 the `check` CLI, described above) locally before opening a PR.
+Run `bun run check` in `tools/` before a pull request; `bun run check --
+--only <kind>/<category>/<id>` checks one package while you work on it.
 
 The shape of a conforming package: one directory, one manifest, one
 format for every kind (`plugin`, `skill`, `app`, `companion`,
