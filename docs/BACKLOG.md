@@ -155,8 +155,8 @@ packages landed).
 - [ ] **Refresh `README.md` and `CHANGELOG.md`** (S) - both still describe
       "no tooling, no packages," which is no longer true; drifted from
       `docs/dev.md`.
-- [ ] **prose-lint: exclamation points in `CLAUDE.md`, `README.md` and
-      six package READMEs fail the pinned `std-v0.3.0` core** (S,
+- [x] **prose-lint: exclamation points in `CLAUDE.md`, `README.md` and
+      six package READMEs fail the pinned `std-v0.2.0` core** (S,
       rewrite the sentences) - found live during SHARED-PIN-01's CI
       verification (`docs/dev.md`): this repo's own root `CLAUDE.md`
       and `README.md`, plus `plugins/fun/joke/README.md`,
@@ -166,12 +166,16 @@ packages landed).
       weather/README.md`, each have a real exclamation point on line 1
       - `getmaipai/.github/CLAUDE.md`'s own Writing style rule ("no
       exclamation points in technical prose") flags every one of them,
-      and a correctly `std-v0.3.0`-pinned CI run fails on it (this
+      and a correctly `std-v0.2.0`-pinned CI run fails on it (this
       session's own local runs missed it only because its `.github`
-      checkout was 113 commits ahead of `std-v0.3.0` on `main`,
+      checkout was 113 commits ahead of `std-v0.2.0` on `main`,
       unpinned - a separate finding). Exit check: `scripts/check.sh`
       green with a real `getmaipai/.github` checkout pinned to
-      `std-v0.3.0`.
+      `std-v0.2.0`.
+      Resolved 2026-09-20 without rewriting the sentences: the lines
+      are HTML comments and inline code, which the std-v0.2.0 lint
+      misread (its fixes landed after the tag); the gate pinned to
+      std-v0.3.0 passes as it stands (verified at this commit).
 
 ## Review queue
 
