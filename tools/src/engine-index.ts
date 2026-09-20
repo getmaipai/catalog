@@ -25,11 +25,13 @@ export interface EngineIndexEntry extends EngineArchive {
 export interface EngineIndexSource { version: string; engines: EngineIndexEntry[] }
 export interface EngineIndexMetadata extends EngineIndexSource { type: "engine-index"; expires: string; published: number }
 
+export const ALLOWED_ENGINE_HOSTS = ["github.com", "objects.githubusercontent.com", "huggingface.co"] as const;
+
 const archive = {
   type: "object",
   required: ["url", "sha256", "size"],
   properties: {
-    url: { type: "string", format: "uri", pattern: "^https://" },
+    url: { type: "string", format: "uri" },
     sha256: { type: "string", pattern: "^[0-9a-f]{64}$" },
     size: { type: "integer", minimum: 1 },
     label: { type: "string", minLength: 1 },
@@ -77,6 +79,13 @@ export function validateEngineIndex(source: unknown): { ok: true; index: EngineI
   const seen = new Set<string>();
   const errors: string[] = [];
   for (const entry of index.engines) {
+    for (const archive of [entry, ...(entry.extra ?? [])]) {
+      const url = new URL(archive.url);
+      if (url.protocol !== "https:") errors.push(`engine ${entry.name} ${entry.tag}: url must be https`);
+      else if (!(ALLOWED_ENGINE_HOSTS as readonly string[]).includes(url.hostname)) {
+        errors.push(`engine ${entry.name} ${entry.tag}: url host ${url.hostname} is not an allowed release host`);
+      }
+    }
     const key = `${entry.name}/${entry.tag}/${entry.platform}/${entry.arch}`;
     if (seen.has(key)) errors.push(`duplicate entry ${key}`);
     seen.add(key);

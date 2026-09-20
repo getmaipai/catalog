@@ -16,6 +16,9 @@ an entry is `name`, `tag` (the upstream build tag, `b10797`),
 A tag is immutable: a newer upstream build is a new entry, never an
 edit to an old one's URL or checksum.
 
+Release URLs must use HTTPS and one of these hosts: github.com,
+objects.githubusercontent.com, or huggingface.co.
+
 `bun run src/engine-index.ts -- <outFile> [keysDir]` in `tools/`
 validates the source against its schema and writes the signed envelope
 (`{ signed: { type, version, expires, engines }, signatures }`, the

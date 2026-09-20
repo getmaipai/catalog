@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { ensureDevSigners } from "../src/build-index";
 import { verifyEnvelope } from "../src/index-builder";
-import { buildEngineIndex, readEngineIndexSource, validateEngineIndex, type EngineIndexSource } from "../src/engine-index";
+import { ALLOWED_ENGINE_HOSTS, buildEngineIndex, readEngineIndexSource, validateEngineIndex, type EngineIndexSource } from "../src/engine-index";
 
 const SOURCE = join(import.meta.dir, "..", "..", "engines", "index.json");
 let workDir: string;
@@ -24,10 +24,12 @@ describe("validateEngineIndex", () => {
   test("refuses a tag that is not an upstream build tag, an http url, a short checksum, and a duplicate pin", () => {
     const bad = (patch: Partial<EngineIndexSource["engines"][number]>) => validateEngineIndex({ version: "v", engines: [{ ...valid.engines[0]!, ...patch }] });
     expect(bad({ tag: "b10797-macos-arm64" })).toMatchObject({ ok: false });
-    expect(bad({ url: "http://example.com/x.tar.gz" })).toMatchObject({ ok: false });
+    expect(bad({ url: "http://github.com/x.tar.gz" })).toMatchObject({ ok: false, errors: ["engine llama-server b10797: url must be https"] });
+    expect(bad({ url: "https://example.com/x.tar.gz" })).toMatchObject({ ok: false, errors: ["engine llama-server b10797: url host example.com is not an allowed release host"] });
     expect(bad({ sha256: "abc" })).toMatchObject({ ok: false });
     expect(validateEngineIndex({ version: "v", engines: [valid.engines[0]!, valid.engines[0]!] })).toMatchObject({ ok: false, errors: ["duplicate entry llama-server/b10797/darwin/arm64"] });
     expect(validateEngineIndex({ version: "v", engines: [{ ...valid.engines[0]!, extra_field: 1 }] })).toMatchObject({ ok: false });
+    expect(ALLOWED_ENGINE_HOSTS).toHaveLength(3);
   });
 
   test("accepts dotted runtime versions and refuses nightly", () => {
