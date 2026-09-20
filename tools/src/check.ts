@@ -12,6 +12,7 @@ import { join } from "node:path";
 import { lintPackage } from "./lint";
 import { scorecard } from "./scorecard";
 import { vendoringScan } from "./vendoring";
+import { licenceCheck } from "./licence";
 
 const REPO_ROOT = join(import.meta.dir, "..", "..");
 const KIND_DIRS = ["plugins", "skills", "apps", "companions", "integrations", "models", "wakewords", "voices"];
@@ -68,6 +69,7 @@ export interface PackageCheckResult {
   lintErrors: string[];
   scorecardMissing: string[];
   vendoringErrors: string[];
+  licenceErrors: string[];
   passing: boolean;
 }
 
@@ -75,12 +77,14 @@ export function checkPackage(dir: string): PackageCheckResult {
   const lint = lintPackage(dir);
   const score = scorecard(dir);
   const vendoring = vendoringScan(dir);
+  const licence = licenceCheck(dir);
   return {
     dir,
     lintErrors: lint.errors,
     scorecardMissing: score.missing,
     vendoringErrors: vendoring.errors,
-    passing: lint.ok && score.passing && vendoring.ok,
+    licenceErrors: licence.errors,
+    passing: lint.ok && score.passing && vendoring.ok && licence.ok,
   };
 }
 
@@ -107,6 +111,7 @@ function main(): void {
     for (const error of result.lintErrors) console.log(`        lint: ${error}`);
     for (const missing of result.scorecardMissing) console.log(`        scorecard: ${missing}`);
     for (const error of result.vendoringErrors) console.log(`        vendoring: ${error}`);
+    for (const error of result.licenceErrors) console.log(`        licence: ${error}`);
   }
 
   console.log(`\n${results.length - failing}/${results.length} packages passing`);

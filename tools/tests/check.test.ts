@@ -61,6 +61,18 @@ describe("checkPackage", () => {
     expect(result.vendoringErrors.length).toBeGreaterThan(0);
     expect(result.vendoringErrors.some((e) => e.includes("vendored directory vendor"))).toBe(true);
   });
+
+  test("a package whose manifest names a non-accepted licence fails the licence check", () => {
+    const dir = join(repoRoot, "apps", "gpl-two");
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(
+      join(dir, "manifest.json"),
+      JSON.stringify({ id: "gpl-two", kind: "companion", display: "gpl-two", license: "GPL-2.0" }),
+    );
+    const result = checkPackage(dir);
+    expect(result.passing).toBe(false);
+    expect(result.licenceErrors.length).toBeGreaterThan(0);
+  });
 });
 
 describe("checkAll", () => {

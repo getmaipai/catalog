@@ -36,10 +36,11 @@ packages landed).
 - [ ] **Banned-API scan** (M) - same: promised in `CONTRIBUTING.md`, not in
       `tools/src/`.
 - [x] **Vendoring scan** (S-M) - `tools/src/vendoring.ts`, wired into
-      `check.ts`; verified at 0a05307.
+      `check.ts`; verified at 450e4cc.
 - [ ] **Screenshot generation + vision review of store images** (M-L) - not
       in `tools/src/`; no screenshot pipeline exists in this repo at all.
-- [x] **Licence check** (S) - tools/src/licence.ts, tested; wired into check.ts by a follow-up item.
+- [x] **Licence check** (S) - tools/src/licence.ts, tested, wired
+      into check.ts; verified at 3bf200e and this commit.
 - [x] **Engine index** (S, for the Stack's STACK-97) - `engines/index.json`
       (pins per platform: name, upstream build tag, url, sha256, size,
       licence, extra archives, notes), `tools/src/engine-index.ts`
