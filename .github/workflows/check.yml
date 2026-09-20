@@ -124,15 +124,14 @@ jobs:
       # defaulting to false (checked directly, not assumed), so a plain
       # `ref: spec-v0.1.1` checkout couldn't be trusted to leave a
       # resolvable `refs/tags/spec-v0.1.1` behind for `git worktree add`
-      # to use. `fetch-tags: true` at the default shallow depth (rather
-      # than `fetch-depth: 0`'s full history of every branch and tag, a
-      # real and growing transfer cost this repo doesn't otherwise pay)
-      # is tried first here since it's cheaper, if a shallow-but-tagged
-      # fetch still leaves the tag's commit and tree fetchable for `git
-      # worktree add` - to be confirmed on a live CI run before this
-      # lands; `fetch-depth: 0` is the fallback if it doesn't (that one
-      # definitely works: "all history for all branches and tags," the
-      # field's own description).
+      # to use. `fetch-tags: true` at the default shallow depth was
+      # tried first, being cheaper than fetching everything - a live run
+      # (PR 2, first push) showed it isn't enough: the tag ref existed
+      # but its commit wasn't actually fetched, so `ensure-tag.sh` still
+      # said "unknown tag". `fetch-depth: 0` ("all history for all
+      # branches and tags," the field's own description) is the
+      # fallback, at the cost of a full clone of getmaipai/commons on
+      # every run.
       # actions/checkout@v4 refuses any `path` that resolves outside
       # $GITHUB_WORKSPACE (confirmed against its own source, not just
       # docs), so the sibling relationship can't come from `path:
@@ -140,11 +139,11 @@ jobs:
       # one level up (next step), which actions/checkout's own guard
       # doesn't touch (it's a plain shell command, not a second
       # checkout).
-      - name: Check out getmaipai/shared (tags fetched, for ensure-tag.sh's own tag worktrees)
+      - name: Check out getmaipai/shared (full history, for ensure-tag.sh's own tag worktrees)
         uses: actions/checkout@v4
         with:
           repository: getmaipai/commons
-          fetch-tags: true
+          fetch-depth: 0
           path: shared
 
       - name: Link getmaipai/shared as catalog's sibling
@@ -235,12 +234,12 @@ jobs:
       # checked `shared` out at all, a gap that predates this pin
       # change too, since the old bare-checkout pin needed a `shared`
       # sibling here just as much). See the `check` job above for why
-      # `fetch-tags: true` and the nested-checkout-then-symlink shape.
-      - name: Check out getmaipai/shared (tags fetched, for ensure-tag.sh's own tag worktrees)
+      # `fetch-depth: 0` and the nested-checkout-then-symlink shape.
+      - name: Check out getmaipai/shared (full history, for ensure-tag.sh's own tag worktrees)
         uses: actions/checkout@v4
         with:
           repository: getmaipai/commons
-          fetch-tags: true
+          fetch-depth: 0
           path: shared
 
       # -f: a review caught the check job's own un-guarded `ln -s` as
