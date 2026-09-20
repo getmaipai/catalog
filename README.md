@@ -43,8 +43,11 @@ out and how to scaffold a package that reaches bronze).
 ## Development
 
 See [docs/dev.md](docs/dev.md) for the design record. `scripts/check.sh`
-runs the pinned `@maipai/standards` core; it needs a sibling checkout of
-`getmaipai/.github`.
+runs the tools' typecheck and tests, then `check` over every package
+(lint, the scorecard, the vendoring, licence and banned-API scans),
+then the pinned `@maipai/standards` core; it needs a sibling
+`getmaipai/.github` checkout (`../.github` by default, override with
+`MAIPAI_STANDARDS_DIR`). `tools/README.md` lists every tool.
 
 ---
 
