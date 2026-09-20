@@ -35,7 +35,8 @@ packages landed).
 - [x] **Public CI** (`.github/workflows/check.yml`) - tag- and PR-triggered,
       checks out pinned `std-v0.2.0` and runs `scripts/check.sh`.
 - [x] **Permission-diff tool** (M) - tools/src/permission-diff.ts,
-      tested; the PR comment step is a CI item, opened below.
+      tested; `--json` prints the diff as one JSON document; verified at
+      this commit. The PR comment step is a CI item, opened below.
 - [x] **Permission-diff PR comment** - the permission-diff job in
       .github/workflows/check.yml; verified at this commit (runs on the
       next PR).

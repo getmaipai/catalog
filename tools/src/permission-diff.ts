@@ -200,6 +200,14 @@ export function renderPermissionDiff(diffs: Array<{ dir: string; diff: Permissio
   return lines.join("\n").replace(/\n+$/, "") + "\n";
 }
 
+export function toJsonReport(diffs: Array<{ dir: string; diff: PermissionDiff }>): {
+  packages: Array<{ dir: string; empty: boolean; diff: PermissionDiff }>;
+  changed: number;
+} {
+  const packages = diffs.map(({ dir, diff }) => ({ dir, empty: diff.empty, diff }));
+  return { packages, changed: packages.filter((pkg) => !pkg.empty).length };
+}
+
 function readManifest(dir: string): Manifest | null {
   const path = join(dir, "manifest.json");
   if (!existsSync(path)) return null;
@@ -213,7 +221,8 @@ function readManifest(dir: string): Manifest | null {
 function main(): void {
   const args = process.argv.slice(2);
   if (args[0] === "--") args.shift();
-  const [beforeRoot, afterRoot] = args;
+  const json = args.includes("--json");
+  const [beforeRoot, afterRoot] = args.filter((arg) => arg !== "--json" && arg !== "--");
   if (!beforeRoot || !afterRoot) {
     console.error("usage: bun run src/permission-diff.ts -- <beforeRoot> <afterRoot>");
     process.exit(2);
@@ -229,7 +238,7 @@ function main(): void {
     entries.push({ dir, diff });
   }
 
-  console.log(renderPermissionDiff(entries));
+  console.log(json ? JSON.stringify(toJsonReport(entries), null, 2) : renderPermissionDiff(entries));
 }
 
 if (import.meta.main) {

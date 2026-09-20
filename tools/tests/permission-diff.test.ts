@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { Manifest, PrivacyRow } from "../src/permission-diff";
-import { permissionDiff, renderPermissionDiff } from "../src/permission-diff";
+import { permissionDiff, renderPermissionDiff, toJsonReport } from "../src/permission-diff";
 
 function manifest(fields: Partial<Manifest> = {}): Manifest {
   return { id: "example", version: "0.1.0", ...fields };
@@ -71,6 +71,17 @@ describe("permissionDiff", () => {
     expect(renderPermissionDiff([{ dir: "p", diff }])).toBe("No permission changes.\n");
   });
 
+  test("JSON reports changed and unchanged packages", () => {
+    const changed = permissionDiff(manifest({ permissions: ["net:a"] }), manifest({ permissions: ["net:b"] }));
+    const unchanged = permissionDiff(manifest({ permissions: ["net:a"] }), manifest({ permissions: ["net:a"] }));
+    const report = toJsonReport([
+      { dir: "changed", diff: changed },
+      { dir: "unchanged", diff: unchanged },
+    ]);
+    expect(report.changed).toBe(1);
+    expect(report.packages[1]).toMatchObject({ dir: "unchanged", empty: true });
+  });
+
   test("the 'No permission changes.' line when nothing changed", () => {
     expect(renderPermissionDiff([{ dir: "p", diff: permissionDiff(manifest(), manifest()) }])).toBe(
       "No permission changes.\n",
@@ -100,6 +111,36 @@ describe("permissionDiff", () => {
       expect(stdout).toContain("adds permission `net:b` (review closely)");
       expect(stdout).toContain("removes permission `net:a`");
       expect(stdout).toContain("min_role goes from `adult` to `child` (review closely)");
+    } finally {
+      rmSync(beforeRoot, { recursive: true, force: true });
+      rmSync(afterRoot, { recursive: true, force: true });
+    }
+  });
+
+  test("the CLI emits JSON with --json", async () => {
+    const beforeRoot = mkdtempSync(join(tmpdir(), "maipai-catalog-permission-diff-before-"));
+    const afterRoot = mkdtempSync(join(tmpdir(), "maipai-catalog-permission-diff-after-"));
+    try {
+      for (const root of [beforeRoot, afterRoot]) {
+        const pdir = join(root, "plugins", "utilities", "example");
+        mkdirSync(pdir, { recursive: true });
+        writeFileSync(join(pdir, "manifest.json"), JSON.stringify(manifest({ permissions: ["net:a"] })));
+      }
+      const changedDir = join(afterRoot, "plugins", "utilities", "changed");
+      mkdirSync(changedDir, { recursive: true });
+      writeFileSync(join(changedDir, "manifest.json"), JSON.stringify(manifest({ permissions: ["net:b"] })));
+      const proc = Bun.spawn(["bun", "run", "src/permission-diff.ts", "--json", "--", beforeRoot, afterRoot], {
+        cwd: join(import.meta.dir, ".."),
+        stdout: "pipe",
+        stderr: "pipe",
+      });
+      const stdout = await new Response(proc.stdout).text();
+      const code = await proc.exited;
+      const report = JSON.parse(stdout) as { packages: Array<{ dir: string; empty: boolean }>; changed: number };
+      expect(code).toBe(0);
+      expect(report.changed).toBe(1);
+      expect(report.packages.find((pkg) => pkg.dir.endsWith("example"))?.empty).toBe(true);
+      expect(report.packages.find((pkg) => pkg.dir.endsWith("changed"))?.empty).toBe(false);
     } finally {
       rmSync(beforeRoot, { recursive: true, force: true });
       rmSync(afterRoot, { recursive: true, force: true });
