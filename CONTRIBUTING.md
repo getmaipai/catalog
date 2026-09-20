@@ -16,11 +16,20 @@ from the maintainer only.
   assignment in [ASSIGNMENT.md](ASSIGNMENT.md). No exceptions, however
   small the patch. Open your PR; a maintainer will point you to the
   assignment step before review starts.
-- **CI has to be green.** Manifest lint, the permission diff, a banned-API
-  scan, recipe conformance, the speech and prose lints, the PII wordlist, a
-  licence check, a vendoring scan, and screenshot generation with vision
-  review of any store images, plus the scorecard. No review SLA is
-  promised; the scorecard is the first gate before a human reads anything.
+- **The gate has to be green, locally before you open the PR and in
+  CI after.** `bash scripts/check.sh` from the repo root runs the
+  tools' typecheck and tests, then `check` over every package
+  (manifest and recipe lint, the scorecard, the vendoring scan, the
+  licence check, the banned-API scan), then the org's standards core
+  (gitleaks, the PII wordlist, the prose lint, the licence file).
+  `cd tools && bun run check` runs the package half alone. What
+  `check` prints is what a maintainer reads first; a red line there
+  is answered before a human reviews anything.
+- **Still to come, not yet enforced:** the permission-diff comment on
+  a PR, recipe conformance on both interpreters, the speech lint, and
+  screenshot generation with vision review of store images. They are
+  listed in `docs/BACKLOG.md` under Tooling; a PR is not blocked on
+  them today.
 - **Trademarks and platform names stay out of ids and branding.** See the
   Trademarks section of
   [`CLAUDE.md`](https://github.com/getmaipai/.github/blob/main/CLAUDE.md)
