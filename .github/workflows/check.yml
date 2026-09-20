@@ -65,6 +65,38 @@ jobs:
           MAIPAI_STANDARDS_DIR: ${{ github.workspace }}/.github-standards
         run: bash scripts/check.sh
 
+      - name: Write package check JSON
+        if: always()
+        run: cd tools && bun run src/check.ts --json > "$RUNNER_TEMP/check.json" || true
+
+      - name: Summarize package check
+        if: always()
+        run: |
+          node - <<'NODE'
+          const fs = require("node:fs");
+          const summary = process.env.GITHUB_STEP_SUMMARY;
+          let report;
+          try {
+            report = JSON.parse(fs.readFileSync(`${process.env.RUNNER_TEMP}/check.json`, "utf8"));
+          } catch {
+            fs.appendFileSync(summary, "Package check produced no report.\n");
+            process.exit(0);
+          }
+          const lines = [
+            "## Package check",
+            `${report.passing}/${report.total} packages passing`,
+            "",
+            "| Package | Result | Problems |",
+            "| --- | --- | ---: |",
+          ];
+          for (const pkg of report.packages) {
+            const problems = [pkg.lint, pkg.scorecard, pkg.vendoring, pkg.licence, pkg.bannedApi]
+              .reduce((count, errors) => count + errors.length, 0);
+            lines.push(`| ${pkg.dir} | ${pkg.passing ? "ok" : "FAIL"} | ${problems} |`);
+          }
+          fs.appendFileSync(summary, `${lines.join("\n")}\n`);
+          NODE
+
   # Permission changes need review on pull requests, while tag runs only
   # publish the catalog and have no pull request to annotate. Update one
   # comment per PR so the review surface stays current instead of noisy.
