@@ -34,7 +34,7 @@ packages landed).
 - [ ] **Permission-diff PR comment** (M) - `CONTRIBUTING.md` promises this
       as a CI gate; no code for it in `tools/src/`.
 - [x] **Banned-API scan** (M) - tools/src/bannedApi.ts, thirteen rules,
-      tested; wired into check.ts by a follow-up item.
+      tested; wired into check.ts; verified at this commit.
 - [x] **Vendoring scan** (S-M) - `tools/src/vendoring.ts`, wired into
       `check.ts`; verified at 450e4cc.
 - [ ] **Screenshot generation + vision review of store images** (M-L) - not

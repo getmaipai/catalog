@@ -73,6 +73,15 @@ describe("checkPackage", () => {
     expect(result.passing).toBe(false);
     expect(result.licenceErrors.length).toBeGreaterThan(0);
   });
+
+  test("a package whose handler.ts contains a bare fetch( fails the banned-API scan", () => {
+    const dir = join(repoRoot, "apps", "bare-fetch");
+    writeManifest(dir, "bare-fetch");
+    writeFileSync(join(dir, "handler.ts"), "export function h() { fetch(url); }\n");
+    const result = checkPackage(dir);
+    expect(result.passing).toBe(false);
+    expect(result.bannedApiErrors.length).toBeGreaterThan(0);
+  });
 });
 
 describe("checkAll", () => {

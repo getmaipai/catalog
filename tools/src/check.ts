@@ -13,6 +13,7 @@ import { lintPackage } from "./lint";
 import { scorecard } from "./scorecard";
 import { vendoringScan } from "./vendoring";
 import { licenceCheck } from "./licence";
+import { bannedApiScan } from "./bannedApi";
 
 const REPO_ROOT = join(import.meta.dir, "..", "..");
 const KIND_DIRS = ["plugins", "skills", "apps", "companions", "integrations", "models", "wakewords", "voices"];
@@ -70,6 +71,7 @@ export interface PackageCheckResult {
   scorecardMissing: string[];
   vendoringErrors: string[];
   licenceErrors: string[];
+  bannedApiErrors: string[];
   passing: boolean;
 }
 
@@ -78,13 +80,15 @@ export function checkPackage(dir: string): PackageCheckResult {
   const score = scorecard(dir);
   const vendoring = vendoringScan(dir);
   const licence = licenceCheck(dir);
+  const bannedApi = bannedApiScan(dir);
   return {
     dir,
     lintErrors: lint.errors,
     scorecardMissing: score.missing,
     vendoringErrors: vendoring.errors,
     licenceErrors: licence.errors,
-    passing: lint.ok && score.passing && vendoring.ok && licence.ok,
+    bannedApiErrors: bannedApi.errors,
+    passing: lint.ok && score.passing && vendoring.ok && licence.ok && bannedApi.ok,
   };
 }
 
@@ -112,6 +116,7 @@ function main(): void {
     for (const missing of result.scorecardMissing) console.log(`        scorecard: ${missing}`);
     for (const error of result.vendoringErrors) console.log(`        vendoring: ${error}`);
     for (const error of result.licenceErrors) console.log(`        licence: ${error}`);
+    for (const error of result.bannedApiErrors) console.log(`        banned-api: ${error}`);
   }
 
   console.log(`\n${results.length - failing}/${results.length} packages passing`);
