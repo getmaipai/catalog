@@ -19,6 +19,7 @@ describe("validateEngineIndex", () => {
     expect(source.engines.length).toBeGreaterThan(0);
     expect(source.engines.some((entry) => entry.name === "uv")).toBe(true);
     expect(source.engines.some((entry) => entry.name === "comfyui")).toBe(true);
+    expect(validateEngineIndex(source)).toMatchObject({ ok: true });
   });
 
   test("refuses a tag that is not an upstream build tag, an http url, a short checksum, and a duplicate pin", () => {
@@ -26,7 +27,12 @@ describe("validateEngineIndex", () => {
     expect(bad({ tag: "b10797-macos-arm64" })).toMatchObject({ ok: false });
     expect(bad({ url: "http://github.com/x.tar.gz" })).toMatchObject({ ok: false, errors: ["engine llama-server b10797: url must be https"] });
     expect(bad({ url: "https://example.com/x.tar.gz" })).toMatchObject({ ok: false, errors: ["engine llama-server b10797: url host example.com is not an allowed release host"] });
-    expect(bad({ sha256: "abc" })).toMatchObject({ ok: false });
+    const shortSha = bad({ sha256: "a".repeat(63) });
+    expect(shortSha).toMatchObject({ ok: false });
+    expect(shortSha.ok === false && shortSha.errors.some((error) => error.includes("sha256"))).toBe(true);
+    const zeroSize = bad({ size: 0 });
+    expect(zeroSize).toMatchObject({ ok: false });
+    expect(zeroSize.ok === false && zeroSize.errors.some((error) => error.includes("size"))).toBe(true);
     expect(validateEngineIndex({ version: "v", engines: [valid.engines[0]!, valid.engines[0]!] })).toMatchObject({ ok: false, errors: ["duplicate entry llama-server/b10797/darwin/arm64"] });
     expect(validateEngineIndex({ version: "v", engines: [{ ...valid.engines[0]!, extra_field: 1 }] })).toMatchObject({ ok: false });
     expect(ALLOWED_ENGINE_HOSTS).toHaveLength(3);
