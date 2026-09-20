@@ -35,8 +35,10 @@ the current step-0 checklist.
 
 This is the one repo in the org that accepts pull requests. Every merge
 needs a signed copyright assignment (`ASSIGNMENT.md`) and a green CI run.
-See `CONTRIBUTING.md` and `AGENTS.md` once they land; both are placeholders
-today.
+To contribute a package, read [CONTRIBUTING.md](CONTRIBUTING.md) (the
+signed copyright assignment comes first, then the gate that every pull
+request has to pass) and [AGENTS.md](AGENTS.md) (how the repo is laid
+out and how to scaffold a package that reaches bronze).
 
 ## Development
 
