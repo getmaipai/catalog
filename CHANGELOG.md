@@ -40,3 +40,7 @@ checklist; no release has been cut yet.
   so a hub verifies engine pins against the same signed site.
 - The CLA job tells a contributor how to sign and clears its note once they
   have; `permission-diff --json` for scripts.
+
+### Changed
+
+- The `knowledge` and `media-lookup` plugins' Deno import of zod moved from `npm:zod@4.5.4` to `npm:zod@4.6.5` (b876690, with Home's CHAT-SDK-01: the assistant-ui 0.15.21 floor), so their handlers resolve against the same zod Home bundles.
