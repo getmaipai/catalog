@@ -21,14 +21,14 @@ cd "$(dirname "$0")/.."
 # own `bun install --frozen-lockfile` won't do that for you - it fails
 # loud instead if the lockfile's still stale).
 SPEC_TAG="spec-v0.1.1"
-SHARED_REPO="${MAIPAI_COMMONS_DIR:-../commons}"
+COMMONS_REPO="${MAIPAI_COMMONS_DIR:-../commons}"
 # `-f .../scripts/ensure-tag.sh`, not just `-d`: a directory that
 # exists but isn't really getmaipai/commons (wrong path, stale copy)
 # would otherwise fall through to ensure-tag.sh's own "unknown tag"
 # error, which reads like a missing-tag problem rather than a
 # missing-repo one.
-if [ ! -f "$SHARED_REPO/scripts/ensure-tag.sh" ]; then
-  echo "getmaipai/commons is missing at $SHARED_REPO (set MAIPAI_COMMONS_DIR); tools/ imports @maipai/spec from its spec/ workspace."
+if [ ! -f "$COMMONS_REPO/scripts/ensure-tag.sh" ]; then
+  echo "getmaipai/commons is missing at $COMMONS_REPO (set MAIPAI_COMMONS_DIR); tools/ imports @maipai/spec from its spec/ workspace."
   exit 1
 fi
 # Plain (logical) cd+pwd on purpose, not `cd -P`/`realpath`: a symlinked
@@ -39,9 +39,9 @@ fi
 # `file:` paths as plain string joins, never dereferencing symlinks
 # either) - swapping this for a physical-path resolution would silently
 # point the two at different directories in CI only.
-SHARED_REPO="$(cd "$SHARED_REPO" && pwd)"
+COMMONS_REPO="$(cd "$COMMONS_REPO" && pwd)"
 
-SPEC_DIR="$(bash "$SHARED_REPO/scripts/ensure-tag.sh" spec "$SPEC_TAG")"
+SPEC_DIR="$(bash "$COMMONS_REPO/scripts/ensure-tag.sh" spec "$SPEC_TAG")"
 if [ ! -f "$SPEC_DIR/spec/package.json" ]; then
   echo "$SPEC_TAG's worktree at $SPEC_DIR has no spec/package.json - check the tag."
   exit 1
