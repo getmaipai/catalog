@@ -1,15 +1,93 @@
 import { describe, expect, test } from "bun:test";
 import { ensureDevSigners } from "../src/build-index";
 import { verifyEnvelope } from "../src/index-builder";
-import { buildModelIndex, readModelIndexSource, validateModelIndex, type ModelIndexSource } from "../src/model-index";
+import {
+  buildModelIndex,
+  readModelIndexSource,
+  validateModelIndex,
+  type ModelIndexSource,
+} from "../src/model-index";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
-const SOURCE=join(import.meta.dir,"..","..","models","index.json");
-const valid:ModelIndexSource={version:"2026-09-20",models:[{id:"x",role:"chat",profile:"p16",quality:1,revision:"r",download:{url:"https://huggingface.co/x",sha256:"a".repeat(64),approx_bytes:1}}]};
-const workDir=mkdtempSync(join(tmpdir(),"maipai-model-index-test-"));
-describe("validateModelIndex",()=>{test("accepts the shipped model index",()=>{const source=readModelIndexSource(SOURCE);expect(source.models).toHaveLength(8);expect(validateModelIndex(source)).toMatchObject({ok:true});});test("refuses duplicate ids and short hashes",()=>{expect(validateModelIndex({version:"v",models:[valid.models[0]!,valid.models[0]!]})).toMatchObject({ok:false,errors:["duplicate model x"]});expect(validateModelIndex({version:"v",models:[{...valid.models[0]!,download:{...valid.models[0]!.download,sha256:"a"}}]})).toMatchObject({ok:false});});});
-test("builds a signed model-index envelope with thirty-day expiry",()=>{const signers=ensureDevSigners(join("/tmp","maipai-model-index-test-keys"));const envelope=buildModelIndex(valid,signers.primary,1800000000);expect(envelope.signed).toMatchObject({type:"model-index",models:valid.models});expect(new Date(envelope.signed.expires).getTime()).toBe((1800000000+30*86400)*1000);expect(verifyEnvelope(envelope,[readFileSync(signers.primary.publicKeyPath,"utf8")])).toBe(true);});
-test("refuses a 63-character sha256",()=>{const result=validateModelIndex({version:"v",models:[{...valid.models[0]!,download:{...valid.models[0]!.download,sha256:"a".repeat(63)}}]});expect(result).toMatchObject({ok:false});if(!result.ok)expect(result.errors.join(" ")).toContain("sha256");});
-test("refuses unknown top-level fields",()=>{const result=validateModelIndex({...valid,unknown:true});expect(result).toMatchObject({ok:false});});
+const SOURCE = join(import.meta.dir, "..", "..", "models", "index.json");
+const valid: ModelIndexSource = {
+  version: "2026-09-20",
+  models: [
+    {
+      id: "x",
+      role: "chat",
+      profile: "p16",
+      quality: 1,
+      revision: "r",
+      download: {
+        url: "https://huggingface.co/x",
+        sha256: "a".repeat(64),
+        approx_bytes: 1,
+      },
+    },
+  ],
+};
+const workDir = mkdtempSync(join(tmpdir(), "maipai-model-index-test-"));
+describe("validateModelIndex", () => {
+  test("accepts the shipped model index", () => {
+    const source = readModelIndexSource(SOURCE);
+    expect(source.models).toHaveLength(8);
+    expect(validateModelIndex(source)).toMatchObject({ ok: true });
+  });
+  test("refuses duplicate ids and short hashes", () => {
+    expect(
+      validateModelIndex({
+        version: "v",
+        models: [valid.models[0]!, valid.models[0]!],
+      }),
+    ).toMatchObject({ ok: false, errors: ["duplicate model x"] });
+    expect(
+      validateModelIndex({
+        version: "v",
+        models: [
+          {
+            ...valid.models[0]!,
+            download: { ...valid.models[0]!.download, sha256: "a" },
+          },
+        ],
+      }),
+    ).toMatchObject({ ok: false });
+  });
+});
+test("builds a signed model-index envelope with thirty-day expiry", () => {
+  const signers = ensureDevSigners(
+    join("/tmp", "maipai-model-index-test-keys"),
+  );
+  const envelope = buildModelIndex(valid, signers.primary, 1800000000);
+  expect(envelope.signed).toMatchObject({
+    type: "model-index",
+    models: valid.models,
+  });
+  expect(new Date(envelope.signed.expires).getTime()).toBe(
+    (1800000000 + 30 * 86400) * 1000,
+  );
+  expect(
+    verifyEnvelope(envelope, [
+      readFileSync(signers.primary.publicKeyPath, "utf8"),
+    ]),
+  ).toBe(true);
+});
+test("refuses a 63-character sha256", () => {
+  const result = validateModelIndex({
+    version: "v",
+    models: [
+      {
+        ...valid.models[0]!,
+        download: { ...valid.models[0]!.download, sha256: "a".repeat(63) },
+      },
+    ],
+  });
+  expect(result).toMatchObject({ ok: false });
+  if (!result.ok) expect(result.errors.join(" ")).toContain("sha256");
+});
+test("refuses unknown top-level fields", () => {
+  const result = validateModelIndex({ ...valid, unknown: true });
+  expect(result).toMatchObject({ ok: false });
+});
