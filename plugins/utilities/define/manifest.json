@@ -16,7 +16,7 @@
       "what does the word ubiquitous mean",
       "what does gregarious mean"
     ],
-    "patterns": ["what does * mean", "define *", "what's the definition of *"]
+    "patterns": ["define *"]
   },
   "args": {
     "type": "object",

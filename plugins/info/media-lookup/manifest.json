@@ -19,16 +19,7 @@
       "what is Cobra rated",
       "tell me about the movie Cobra"
     ],
-    "patterns": [
-      "what's the runtime of *",
-      "who directed *",
-      "what is * about",
-      "is * any good",
-      "when did * come out",
-      "who's in *",
-      "what is * rated",
-      "tell me about the movie *"
-    ]
+    "patterns": []
   },
   "args": {
     "type": "object",

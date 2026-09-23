@@ -16,7 +16,7 @@
       "what's the capital of Australia",
       "who invented the telephone"
     ],
-    "patterns": ["who was *", "what is *", "tell me about *", "what's the capital of *", "who invented *"]
+    "patterns": []
   },
   "args": {
     "type": "object",
