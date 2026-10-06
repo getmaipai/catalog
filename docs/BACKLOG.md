@@ -182,3 +182,25 @@ packages landed).
 Empty (`docs/dev.md`'s own table has zero rows) - the legacy hub/robot
 plugin review pass (platform plan section 5.8) hasn't run against this
 repo yet.
+
+## Reachy design v2 packages
+
+- [ ] **PKG-TIMERS-ROBOT-01: timers for the Reachy Mini** (S) - a catalog app for household timers, announced through the robot notification channel. Depends on Home ROBOT-NOTIFY-01.
+- [ ] **PKG-LISTS-ROBOT-01: household lists on the Reachy Mini** (S) - add and read household lists through the hub, with private list content delivered only to the person's device. Depends on Home ROBOT-CHANNEL-01 and ROBOT-NOTIFY-01.
+- [ ] **PKG-DOORBELL-01: doorbell notifications on the Reachy Mini** (S) - a doorbell event sends a content-free private notification or a non-private greeting through Home. Depends on Home HA-EVENTS-01 and ROBOT-NOTIFY-01.
+- [ ] **PKG-STORY-01: stories for the Reachy Mini** (M) - an optional story app, with spoken turns gated by Home's child protections.
+- [ ] **PKG-TUTOR-01: tutoring on the Reachy Mini** (M) - a tutor app; child use requires the parent follow-up switch (OWNER-ANSWERS 2).
+- [ ] **PKG-SENIOR-01: daily brain exercises** (S) - scripted, slow, encouraging exercises. The antenna memory game needs TOUCH-01 or a head-tilt input.
+- [ ] **PKG-GREETER-01: the front-door greeter** (S) - greets only enrolled people by name; a visitor is never recognised or remembered, and a visitor's message carries no face data (OWNER-ANSWERS 4). Depends on FACE-CONSENT-02, FACE-WATCH-01 and ROBOT-NOTIFY-01.
+- [ ] **PKG-PHOTOBOOTH-01: robot photo booth** (S) - countdown, pose clip and a still to the library. Depends on CAPTURE-01.
+- [ ] **PKG-MEDS-01: medicine and routine reminders** (M) - spoken confirmation and escalation; private reminders use only the fixed "something is waiting" robot line. Depends on ROBOT-NOTIFY-01 and the KWS set.
+- [ ] **PKG-SIMON-01: Simon with head, body and antennas** (M) - a Simon game for the robot. Depends on S-EXPR-01R and TOUCH-01.
+- [ ] **PKG-RLGL-01: red light, green light** (M) - on-robot frame differencing. Depends on FACE-WATCH-01.
+- [ ] **PKG-RPS-01: rock, paper, scissors** (S) - a game using observed hand gestures; gestures never accept an offer. Depends on GESTURE-01.
+- [ ] **PKG-PEEKABOO-01: peekaboo and hide and seek** (S) - a face-presence game. Depends on FACE-WATCH-01.
+- [ ] **PKG-MUSIC-01: music quiz and dance** (M) - quiz and dance to the household library. Depends on the music role and MOVES-01.
+- [ ] **PKG-RADIO-01: radio and ambient sound** (M) - play through the hub, with an antenna as a dial. Depends on the media player device; per-antenna torque remains UNVERIFIED on the local API.
+- [ ] **PKG-MOVES-01: recorded emotions and dances** (S, model-like data package) - optional pack installed through Home. Its Pollen move pins and checksums live in this package manifest only, never `spec/assets/robot-assets.json` (OWNER-ANSWERS 7). EMO-MAP-01 and REACT-MAP-01 use the primitive when this pack is absent. Depends on ROBOT-ASSETS-01.
+- [ ] **PKG-TEACH-01: teach a move** (S) - record a move for later playback. Depends on MOVES-02.
+- [ ] **PKG-CAMERAMAN-01: keep the family in frame** (M) - live view is limited to an admin or named adult (LIVE-VIEW-01); gestures never accept an offer. Depends on LIVE-VIEW-01 and GESTURE-01.
+- [ ] **PKG-TELEOP-01: teleoperate the head** (M) - drive the head from a phone through the hub and record a demo. Depends on LIVE-VIEW-01.
