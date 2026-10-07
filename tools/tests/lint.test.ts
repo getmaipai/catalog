@@ -34,6 +34,7 @@ const VALID_TIER0_MANIFEST = {
   min_role: "child",
   consequential: false,
   offline: "full",
+  incognito: "unaffected",
   permissions: [],
   smoke: { kind: "static" },
   min_app: "0.1.0",

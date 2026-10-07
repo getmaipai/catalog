@@ -16,7 +16,7 @@ afterEach(() => {
 
 function writeManifest(dir: string, id: string): void {
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "manifest.json"), JSON.stringify({ id, kind: "companion", display: id }));
+  writeFileSync(join(dir, "manifest.json"), JSON.stringify({ id, kind: "companion", display: id, incognito: "unaffected" }));
 }
 
 describe("findPackages", () => {

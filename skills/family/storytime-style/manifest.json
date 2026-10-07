@@ -19,7 +19,9 @@
   },
   "requires": [],
   "optional": [],
-  "platforms": ["home"],
+  "platforms": [
+    "home"
+  ],
   "min_role": "child",
   "consequential": false,
   "offline": "full",
@@ -31,5 +33,8 @@
   "min_app": "0.1.0",
   "tier": 0,
   "quality_scale": "bronze",
-  "smoke": { "kind": "static" }
+  "smoke": {
+    "kind": "static"
+  },
+  "incognito": "unaffected"
 }
