@@ -33,3 +33,9 @@ All notable changes to the Media Lookup package, in [Keep a Changelog](https://k
   spoken. A miss is reported as the typed `not_found` error (getmaipai/
   home#92's shape), not a spoken apology, the same as the knowledge
   package.
+
+### Added
+
+- A bounded `data` projection for CHAT-16 with only the title, year, kind,
+  director, runtime, rating, and source. Cast and Wikipedia synopsis remain
+  outside the model-facing data projection.
