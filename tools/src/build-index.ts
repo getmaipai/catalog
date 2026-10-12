@@ -182,6 +182,11 @@ export async function buildIndex(
       const { buildModelIndex, readModelIndexSource } = await import("./model-index");
       writeEnvelope(buildModelIndex(readModelIndexSource(modelSourcePath), signers.primary, version), join(outDir, "model-index.json"));
     }
+    const listSourcePath = join(engineSourcePath, "..", "..", "lists", "index.json");
+    if (existsSync(listSourcePath)) {
+      const { buildListIndex, readListIndexSource } = await import("./list-index");
+      writeEnvelope(buildListIndex(readListIndexSource(listSourcePath), signers.primary, version), join(outDir, "list-index.json"));
+    }
   }
 
   return { outDir, rootPath, targetsPath, timestampPath, tarballs };

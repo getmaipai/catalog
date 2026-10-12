@@ -1,0 +1,9 @@
+{
+  "note": "Hosts no blocked-site list may contain, nor any parent of one (MINOR-SEARCH-01e-2). A re-pin that finds one is refused.",
+  "hosts": [
+    "wikipedia.org", "wikimedia.org", "wiktionary.org", "britannica.com", "khanacademy.org", "nih.gov", "cdc.gov",
+    "who.int", "kidshealth.org", "mayoclinic.org", "nasa.gov", "bbc.co.uk", "bbc.com", "nytimes.com", "npr.org",
+    "thetrevorproject.org", "plannedparenthood.org", "scarleteen.com", "github.com", "duckduckgo.com", "brave.com",
+    "bing.com", "mojeek.com", "startpage.com", "google.com", "archive.org", "stackoverflow.com", "mozilla.org"
+  ]
+}

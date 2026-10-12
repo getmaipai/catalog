@@ -65,6 +65,7 @@ packages landed).
       model package lands: the Stack already reads
       `releases/latest/download/model-index.json` (`{ version, models }`
       with role, minimum profile, quality band and the pinned download).
+- [x] **List index** (S, MINOR-SEARCH-01e-2, verified at this commit) - the same shape for `lists/` (blocked-site list pins for the Home hub: id, source URL at a commit sha, sha256, bytes, entries, format, licence): `tools/src/list-index.ts` (schema, branch-URL and licence refusal, ids checked against the pinned spec's `search/blocklists.json`, the signed `list-index.json` envelope with a thirty-day expiry, published by `build-index`) and `tools/src/list-repin.ts` (the maintainer-run monthly re-pin with licence, 20% entry-delta, public-suffix, canary-host and size guards; `lists/canary.json`).
 - [ ] **Real online timestamp/release signing key** (M) - `sign.ts` only
       has a local dev keypair path; no tag-triggered publish to a real key.
 - [x] **CLA-signature bot: check a contributor signed `ASSIGNMENT.md` once,
