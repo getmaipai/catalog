@@ -9,7 +9,8 @@ import { ensureDevSigners } from "./build-index";
 import { signEnvelope, writeEnvelope, type SignedEnvelope, type SignerKey } from "./index-builder";
 import { ACCEPTED_LICENCES } from "./licence";
 
-export const LIST_MAX_BYTES = 64 * 1024 * 1024;
+/** 128 MiB: the malware list is about 72 MB (owner-approved 2026-10-12). Twin of the other repo's constant. */
+export const LIST_MAX_BYTES = 128 * 1024 * 1024;
 export const LIST_MAX_ENTRIES = 2_000_000;
 /** An https raw.githubusercontent.com URL at a 40-character commit sha, never a branch. */
 export const PINNED_SOURCE_URL = /^https:\/\/raw\.githubusercontent\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/[0-9a-f]{40}\/[^?#\s]+$/;

@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ensureDevSigners } from "../src/build-index";
 import { verifyEnvelope } from "../src/index-builder";
-import { buildListIndex, readListIndexSource, specListIds, validateListIndex, type ListIndexEntry, type ListIndexSource } from "../src/list-index";
+import { LIST_MAX_BYTES, buildListIndex, readListIndexSource, specListIds, validateListIndex, type ListIndexEntry, type ListIndexSource } from "../src/list-index";
 import { applyPin, evaluateRepin } from "../src/list-repin";
 
 const SOURCE = join(import.meta.dir, "..", "..", "lists", "index.json");
@@ -16,6 +16,14 @@ const entry: ListIndexEntry = {
 const bytes = (text: string) => new TextEncoder().encode(text);
 const file = (n: number) => Array.from({ length: n }, (_, i) => `0.0.0.0 site${i}.example.net`).join("\n");
 const base = { id: "blp-porn", source_url: URL_OK, format: "hosts" as const, licence: "Unlicense", upstream: "x", canaryHosts: CANARY, today: "2026-11-01" };
+
+describe("size cap", () => {
+  test("the cap fits the 72 MB malware list and stays twin to the hub", () => {
+    expect(LIST_MAX_BYTES).toBe(128 * 1024 * 1024);
+    expect(LIST_MAX_BYTES).toBeGreaterThan(72_161_681);
+    expect(validateListIndex({ version: "v", lists: [{ ...entry, bytes: LIST_MAX_BYTES + 1 }] })).toMatchObject({ ok: false });
+  });
+});
 
 describe("validateListIndex", () => {
   test("accepts the shipped list index, and its ids are all declared by the pinned spec", () => {

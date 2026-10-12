@@ -16,4 +16,4 @@ Re-pin (maintainer, monthly):
 
 The script fetches the file, counts entries with the spec's `parseHostList`, and refuses the pin when the licence is not
 accepted, entries move more than 20% from the last pin, any entry is a public suffix or a canary host (or a parent of
-one, see `canary.json`), or the file is over 64 MB or 2 million entries.
+one, see `canary.json`), or the file is over 128 MiB or 2 million entries.
