@@ -11,6 +11,61 @@
       "licence": "Unlicense",
       "upstream": "The Block List Project",
       "pinned_at": "2026-10-12"
+    },
+    {
+      "id": "blp-drugs",
+      "source_url": "https://raw.githubusercontent.com/blocklistproject/Lists/ee3bdbaddf49c756cf3340bb2e6a9dee5282d1c6/drugs.txt",
+      "sha256": "f88d4e83efa34c1d8947c2f8fd43df1ff2a8c732080b9fa2af1929c60af4e2fc",
+      "bytes": 699414,
+      "entries": 26029,
+      "format": "hosts",
+      "licence": "Unlicense",
+      "upstream": "The Block List Project",
+      "pinned_at": "2026-10-12"
+    },
+    {
+      "id": "blp-scam",
+      "source_url": "https://raw.githubusercontent.com/blocklistproject/Lists/ee3bdbaddf49c756cf3340bb2e6a9dee5282d1c6/scam.txt",
+      "sha256": "0a8071ae6dfdb6b7f3e189efd01a0acc1ed55f85ec9d734c9ac0b2838f52e045",
+      "bytes": 223675,
+      "entries": 8527,
+      "format": "hosts",
+      "licence": "Unlicense",
+      "upstream": "The Block List Project",
+      "pinned_at": "2026-10-12"
+    },
+    {
+      "id": "blp-phishing",
+      "source_url": "https://raw.githubusercontent.com/blocklistproject/Lists/ee3bdbaddf49c756cf3340bb2e6a9dee5282d1c6/phishing.txt",
+      "sha256": "4407e6b9af2fa1e4def92ed523643a3380448fde81837341ffc596c6e781f134",
+      "bytes": 5686136,
+      "entries": 190215,
+      "format": "hosts",
+      "licence": "Unlicense",
+      "upstream": "The Block List Project",
+      "pinned_at": "2026-10-12"
+    },
+    {
+      "id": "blp-gambling",
+      "source_url": "https://raw.githubusercontent.com/blocklistproject/Lists/ee3bdbaddf49c756cf3340bb2e6a9dee5282d1c6/gambling.txt",
+      "sha256": "d583202e86eb80f8cb6311e65d10f36e472d921d7cac5ff18e98d7dd0b9cf439",
+      "bytes": 8368035,
+      "entries": 342623,
+      "format": "hosts",
+      "licence": "Unlicense",
+      "upstream": "The Block List Project",
+      "pinned_at": "2026-10-12"
+    },
+    {
+      "id": "blp-malware",
+      "source_url": "https://raw.githubusercontent.com/blocklistproject/Lists/ee3bdbaddf49c756cf3340bb2e6a9dee5282d1c6/malware.txt",
+      "sha256": "0b439fa1a71f1482eaf922321ee7c824beabebdd81173b68ead7e4ffa07e0115",
+      "bytes": 72161681,
+      "entries": 2656393,
+      "format": "hosts",
+      "licence": "Unlicense",
+      "upstream": "The Block List Project",
+      "pinned_at": "2026-10-12"
     }
   ]
 }
