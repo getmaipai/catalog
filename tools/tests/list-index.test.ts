@@ -69,8 +69,10 @@ describe("evaluateRepin guards", () => {
     expect(evaluateRepin({ ...base, previous, bytes: bytes(file(5)) }).ok).toBe(false);
   });
   test("refuses a public suffix and a canary host or one of its parents", () => {
-    const suffix = evaluateRepin({ ...base, bytes: bytes(`${file(3)}\n0.0.0.0 co.uk`) });
+    const suffix = evaluateRepin({ ...base, bytes: bytes(`${file(3)}\n0.0.0.0 co.uk\n0.0.0.0 co.cz`) });
     expect(suffix).toMatchObject({ ok: false });
+    // One inert suffix entry in a big list is a warning, not a refusal.
+    expect(evaluateRepin({ ...base, bytes: bytes(`${file(30000)}\n0.0.0.0 co.cz`) }).ok).toBe(true);
     const canary = evaluateRepin({ ...base, bytes: bytes(`${file(3)}\n0.0.0.0 wikipedia.org`) });
     expect(canary).toMatchObject({ ok: false });
     const parent = evaluateRepin({ ...base, bytes: bytes(`${file(3)}\n0.0.0.0 bbc.co.uk`) });

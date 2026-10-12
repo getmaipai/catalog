@@ -17,6 +17,9 @@ import {
 } from "./list-index";
 
 export const MAX_ENTRY_DELTA = 0.2;
+/** Entries that are themselves public suffixes are inert (the hub matcher never matches at or above a public suffix),
+ * so a handful is a warning. More than this share of the list is a sign of a broken file and refuses the pin. */
+export const MAX_SUFFIX_SHARE = 0.0001;
 
 export interface RepinInput {
   id: string;
@@ -54,9 +57,11 @@ export function evaluateRepin(input: RepinInput): { ok: true; pin: ListIndexEntr
     if (getDomain(host, { allowPrivateDomains: true }) === null) suffixes.push(host);
     for (const canary of input.canaryHosts) if (coversCanary(host, canary)) canaries.push(host);
   }
-  if (suffixes.length) errors.push(`${suffixes.length} entries are public suffixes, such as ${suffixes.slice(0, 3).join(", ")}`);
+  if (suffixes.length > Math.max(1, parsed.entries * MAX_SUFFIX_SHARE))
+    errors.push(`${suffixes.length} entries are public suffixes, such as ${suffixes.slice(0, 3).join(", ")}`);
   if (canaries.length) errors.push(`${canaries.length} entries would block a host that must never be blocked, such as ${canaries.slice(0, 3).join(", ")}`);
   if (errors.length) return { ok: false, errors };
+  if (suffixes.length) console.warn(`note: ${suffixes.length} entries are public suffixes and stay inert: ${suffixes.join(", ")}`);
   return {
     ok: true,
     pin: {

@@ -1,4 +1,16 @@
 {
   "version": "2026-10-12",
-  "lists": []
+  "lists": [
+    {
+      "id": "blp-porn",
+      "source_url": "https://raw.githubusercontent.com/blocklistproject/Lists/ee3bdbaddf49c756cf3340bb2e6a9dee5282d1c6/porn.txt",
+      "sha256": "425590c37e3ea624fdf646b14ba661f8b8f38391686adcf02b73f8b2d74b0db1",
+      "bytes": 26095053,
+      "entries": 953393,
+      "format": "hosts",
+      "licence": "Unlicense",
+      "upstream": "The Block List Project",
+      "pinned_at": "2026-10-12"
+    }
+  ]
 }
