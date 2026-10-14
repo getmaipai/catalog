@@ -3,7 +3,18 @@
   "inputs": [
     {
       "name": "place",
-      "selector": "text"
+      "selector": "text",
+      "required": false
+    },
+    {
+      "name": "latitude",
+      "selector": "number",
+      "required": false
+    },
+    {
+      "name": "longitude",
+      "selector": "number",
+      "required": false
     }
   ],
   "steps": [
