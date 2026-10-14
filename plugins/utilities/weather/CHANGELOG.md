@@ -2,6 +2,10 @@
 
 All notable changes to the Weather package, in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [0.1.2] - 2026-10-14
+
+- Restores the weather answer blocks and records hourly background fetches in the privacy details.
+
 ## [Unreleased]
 
 ### Added

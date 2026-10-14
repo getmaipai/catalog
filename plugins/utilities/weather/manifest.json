@@ -1,6 +1,6 @@
 {
   "id": "weather",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "kind": "plugin",
   "category": "Utilities",
   "display": "Weather",
@@ -81,7 +81,7 @@
       "attribution": "Weather data by Open-Meteo.com (CC BY 4.0)",
       "hosts": ["geocoding-api.open-meteo.com", "api.open-meteo.com"],
       "destination": "Open-Meteo (open-meteo.com), a free public weather API",
-      "when": "each time the family asks for the weather",
+      "when": "each time the family asks for the weather somewhere, and about once an hour in the background for your home place",
       "what": "the place name only when someone names a place; otherwise weather coordinates rounded by the host (two decimals for teens and adults, one decimal for children)",
       "who": "Open-Meteo",
       "opt_in": true,
@@ -133,5 +133,10 @@
   "offer": {
     "mode": "base",
     "priority": 8
-  }
+  },
+  "returns_blocks": [
+    "spec_sheet",
+    "chart",
+    "data_table"
+  ]
 }
