@@ -40,15 +40,47 @@
   "consequential": false,
   "offline": "unavailable",
   "config": [
-    { "key": "weather.places", "scope": "person", "selector": "location", "range": { "multiple": true, "allow_current": false }, "default": [], "label": "Weather places", "help": "Places saved for weather.", "level": "basic", "lives_in": "weather", "honoured_by": ["home"] },
-    { "key": "weather.default_place", "scope": "person", "selector": "location", "range": { "multiple": false, "allow_current": true }, "default": "current", "label": "Weather default place", "help": "The place used by default for weather.", "level": "basic", "lives_in": "weather", "honoured_by": ["home"] }
+    {
+      "key": "weather.places",
+      "scope": "person",
+      "selector": "location",
+      "range": {
+        "multiple": true,
+        "allow_current": false
+      },
+      "default": [],
+      "label": "Weather places",
+      "help": "Places saved for weather.",
+      "level": "basic",
+      "lives_in": "weather",
+      "honoured_by": [
+        "home"
+      ]
+    },
+    {
+      "key": "weather.default_place",
+      "scope": "person",
+      "selector": "location",
+      "range": {
+        "multiple": false,
+        "allow_current": true
+      },
+      "default": "current",
+      "label": "Weather default place",
+      "help": "The place used by default for weather.",
+      "level": "basic",
+      "lives_in": "weather",
+      "honoured_by": [
+        "home"
+      ]
+    }
   ],
   "data_sources": [
     {
       "id": "open-meteo",
       "destination": "Open-Meteo (open-meteo.com), a free public weather API",
-      "when": "each time the family asks for the weather somewhere",
-      "what": "weather coordinates rounded to about one kilometre (two decimals for teens and adults; one decimal for children); a spoken place name is sent only when the person names one",
+      "when": "each time the family asks for the weather",
+      "what": "rounded weather coordinates (two decimals for teens and adults; one decimal for children); a spoken place name is sent only when the person names one",
       "who": "Open-Meteo",
       "opt_in": true,
       "retention": "unknown, see Open-Meteo's own policy"
@@ -60,7 +92,7 @@
   ],
   "notifications": [],
   "cache": {
-    "key_template": "weather:{place}",
+    "key_template": "weather:{latitude}:{longitude}",
     "ttl_s": 1800,
     "stale_ok_s": 3600,
     "max_bytes": 4096
@@ -69,6 +101,8 @@
     "schedule": "every:1h",
     "keys": [
       {
+        "latitude": 47.61,
+        "longitude": -122.33,
         "place": "Seattle"
       }
     ]
@@ -99,5 +133,6 @@
   "offer": {
     "mode": "base",
     "priority": 8
-  }
+  },
+  "recipe": null
 }

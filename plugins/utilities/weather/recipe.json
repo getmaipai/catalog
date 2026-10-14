@@ -43,12 +43,6 @@
     },
     {
       "op": "fetch",
-      "as": "geo",
-      "url": "https://geocoding-api.open-meteo.com/v1/search?count=1&name={location_query}",
-      "method": "GET"
-    },
-    {
-      "op": "fetch",
       "as": "wx",
       "url": "https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=1&timezone=auto&temperature_unit=fahrenheit",
       "method": "GET"
