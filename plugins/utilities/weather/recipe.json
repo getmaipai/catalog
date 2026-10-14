@@ -8,31 +8,39 @@
     },
     {
       "name": "latitude",
-      "selector": "number"
+      "selector": "number",
+      "required": false
     },
     {
       "name": "longitude",
-      "selector": "number"
+      "selector": "number",
+      "required": false
     }
   ],
   "steps": [
     {
+      "op": "fetch",
+      "as": "geo",
+      "url": "https://geocoding-api.open-meteo.com/v1/search?count=1&name={place}",
+      "method": "GET"
+    },
+    {
       "op": "pick",
       "as": "lat",
-      "from": "inputs",
-      "path": "latitude"
+      "from": "geo",
+      "path": "results.0.latitude"
     },
     {
       "op": "pick",
       "as": "lon",
-      "from": "inputs",
-      "path": "longitude"
+      "from": "geo",
+      "path": "results.0.longitude"
     },
     {
       "op": "pick",
       "as": "place_name",
-      "from": "inputs",
-      "path": "place"
+      "from": "geo",
+      "path": "results.0.name"
     },
     {
       "op": "fetch",
