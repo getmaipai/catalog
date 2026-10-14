@@ -20,7 +20,7 @@ cd "$(dirname "$0")/.."
 # then a plain `bun install` in tools/ to refresh bun.lock (this step's
 # own `bun install --frozen-lockfile` won't do that for you - it fails
 # loud instead if the lockfile's still stale).
-SPEC_TAG="spec-v0.1.138"
+SPEC_TAG="spec-v0.1.139"
 COMMONS_REPO="${MAIPAI_COMMONS_DIR:-../commons}"
 # `-f .../scripts/ensure-tag.sh`, not just `-d`: a directory that
 # exists but isn't really getmaipai/commons (wrong path, stale copy)
@@ -66,6 +66,19 @@ if [ "$ACTUAL_SPEC_DEPENDENCY" != "$EXPECTED_SPEC_DEPENDENCY" ]; then
   exit 1
 fi
 
+STANDARDS_REPO="${MAIPAI_STANDARDS_DIR:-../.github}"
+STD_TAG="std-v0.3.3"
+if [ ! -x "$STANDARDS_REPO/standards/bin/ensure-tag.sh" ]; then
+  echo "getmaipai/.github is missing at $STANDARDS_REPO or older than $STD_TAG (set MAIPAI_STANDARDS_DIR to a checkout that has standards/bin/ensure-tag.sh)"
+  exit 1
+fi
+STANDARDS_DIR="$(bash "$STANDARDS_REPO/standards/bin/ensure-tag.sh" "$STD_TAG")"
+export MAIPAI_STANDARDS_DIR="$STANDARDS_DIR"
+if [ "$(cat "$STANDARDS_DIR/standards/VERSION")" != "${STD_TAG#std-v}" ]; then
+  echo "@maipai/standards at $STANDARDS_DIR is $(cat "$STANDARDS_DIR/standards/VERSION"), but the tag is $STD_TAG"
+  exit 1
+fi
+
 echo "== tools: install"
 (cd tools && bun install --frozen-lockfile)
 
@@ -74,23 +87,6 @@ echo "== tools: typecheck"
 
 echo "== tools: tests"
 (cd tools && bun test)
-
-STANDARDS_REPO="${MAIPAI_STANDARDS_DIR:-../.github}"
-STD_TAG="std-v0.3.2"
-if [ ! -x "$STANDARDS_REPO/standards/bin/ensure-tag.sh" ]; then
-  echo "getmaipai/.github is missing at $STANDARDS_REPO or older than std-v0.3.2 (set MAIPAI_STANDARDS_DIR to a checkout that has standards/bin/ensure-tag.sh)"
-  exit 1
-fi
-STANDARDS_DIR="$(bash "$STANDARDS_REPO/standards/bin/ensure-tag.sh" "$STD_TAG")"
-export MAIPAI_STANDARDS_DIR="$STANDARDS_DIR"
-EXPECTED_STANDARDS_VERSION="${STD_TAG#std-v}"
-# std-v0.3.2 carries the PrivacyRow attribution and hosts fields, but its VERSION file still says 0.3.1.
-if [ "$STD_TAG" = "std-v0.3.2" ]; then EXPECTED_STANDARDS_VERSION="0.3.1"; fi
-if [ "$(cat "$STANDARDS_DIR/standards/VERSION")" != "$EXPECTED_STANDARDS_VERSION" ]; then
-  echo "@maipai/standards at $STANDARDS_DIR is $(cat "$STANDARDS_DIR/standards/VERSION"), but this gate expects $EXPECTED_STANDARDS_VERSION for $STD_TAG"
-  exit 1
-fi
-
 
 echo "== tools: check (lint + scorecard, every package)"
 (cd tools && bun run check)
