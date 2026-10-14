@@ -9,7 +9,7 @@
       "id": "c-001",
       "band": "child",
       "category": "animals",
-      "question": "What is the largest animal on Earth?",
+      "question": "What is the largest living animal on Earth?",
       "answer": "Blue whale",
       "source": "https://www.nationalgeographic.com/animals/mammals/facts/blue-whale"
     },
@@ -19,7 +19,7 @@
       "category": "animals",
       "question": "What do bees collect from flowers?",
       "answer": "Nectar",
-      "source": "https://www.si.edu/spotlight/buginfo/bees"
+      "source": "https://gardens.si.edu/gardens/pollinator-garden/why-what-when-where-who-how-pollination/"
     },
     {
       "id": "c-003",
@@ -43,7 +43,7 @@
       "category": "animals",
       "question": "Which bird can hover and fly backward?",
       "answer": "Hummingbird",
-      "source": "https://www.si.edu/spotlight/buginfo/hummingbirds"
+      "source": "https://nationalzoo.si.edu/migratory-birds/hummingbirds"
     },
     {
       "id": "c-006",
@@ -401,7 +401,7 @@
       "id": "t-009",
       "band": "teen",
       "category": "earth and nature",
-      "question": "What is the most abundant gas in Earth’s atmosphere?",
+      "question": "What is the most abundant gas in Earth’s atmosphere by volume?",
       "answer": "Nitrogen",
       "source": "https://climate.nasa.gov/faq/19/what-is-the-atmosphere/"
     },
@@ -427,7 +427,7 @@
       "category": "the human body",
       "question": "What blood cells carry oxygen?",
       "answer": "Red blood cells",
-      "source": "https://www.nhlbi.nih.gov/health/blood"
+      "source": "https://www.nhlbi.nih.gov/health/blood-tests"
     },
     {
       "id": "t-013",
@@ -451,7 +451,7 @@
       "category": "animals",
       "question": "What is the only mammal capable of true flight?",
       "answer": "Bat",
-      "source": "https://www.si.edu/spotlight/bats"
+      "source": "https://www.si.edu/spotlight/bats/batfacts"
     },
     {
       "id": "t-016",
@@ -489,7 +489,7 @@
       "id": "t-020",
       "band": "teen",
       "category": "animals",
-      "question": "Which animal group includes frogs and salamanders?",
+      "question": "What animal class includes frogs and salamanders?",
       "answer": "Amphibians",
       "source": "https://www.amnh.org/explore/ology/zoology/all-about-amphibians"
     },
@@ -513,7 +513,7 @@
       "id": "t-023",
       "band": "teen",
       "category": "earth and nature",
-      "question": "What is the hardest naturally occurring mineral?",
+      "question": "Which mineral ranks highest on the Mohs hardness scale?",
       "answer": "Diamond",
       "source": "https://www.usgs.gov/faqs/what-mohs-hardness-scale"
     },
@@ -531,7 +531,7 @@
       "category": "the human body",
       "question": "Which organ filters waste from blood to make urine?",
       "answer": "Kidneys",
-      "source": "https://medlineplus.gov/kidneys.html"
+      "source": "https://medlineplus.gov/urineandurination.html"
     },
     {
       "id": "t-026",
@@ -561,7 +561,7 @@
       "id": "t-029",
       "band": "teen",
       "category": "earth and nature",
-      "question": "Which ocean is the deepest?",
+      "question": "Which ocean contains the deepest known part of the ocean?",
       "answer": "Pacific Ocean",
       "source": "https://oceanservice.noaa.gov/facts/oceandepth.html"
     },
