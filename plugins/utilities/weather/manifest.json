@@ -100,5 +100,10 @@
   "offer": {
     "mode": "base",
     "priority": 8
-  }
+  },
+  "returns_blocks": [
+    "spec_sheet",
+    "chart",
+    "data_table"
+  ]
 }
