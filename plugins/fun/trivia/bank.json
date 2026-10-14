@@ -35,7 +35,7 @@
       "category": "animals",
       "question": "What is a baby frog called?",
       "answer": "Tadpole",
-      "source": "https://www.nationalgeographic.com/animals/amphibians/facts/frogs"
+      "source": "https://www.amnh.org/exhibitions/frogs-a-chorus-of-colors/reproduction/tadpoles"
     },
     {
       "id": "c-005",
@@ -83,7 +83,7 @@
       "category": "animals",
       "question": "What do caterpillars turn into?",
       "answer": "Butterflies or moths",
-      "source": "https://www.si.edu/spotlight/buginfo/butterflies"
+      "source": "https://naturalhistory.si.edu/education/teaching-resources/life-science/butterflies-and-beyond"
     },
     {
       "id": "c-011",
