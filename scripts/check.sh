@@ -75,9 +75,6 @@ echo "== tools: typecheck"
 echo "== tools: tests"
 (cd tools && bun test)
 
-echo "== tools: check (lint + scorecard, every package)"
-(cd tools && bun run check)
-
 STANDARDS_REPO="${MAIPAI_STANDARDS_DIR:-../.github}"
 STD_TAG="std-v0.3.2"
 if [ ! -x "$STANDARDS_REPO/standards/bin/ensure-tag.sh" ]; then
@@ -93,6 +90,10 @@ if [ "$(cat "$STANDARDS_DIR/standards/VERSION")" != "$EXPECTED_STANDARDS_VERSION
   echo "@maipai/standards at $STANDARDS_DIR is $(cat "$STANDARDS_DIR/standards/VERSION"), but this gate expects $EXPECTED_STANDARDS_VERSION for $STD_TAG"
   exit 1
 fi
+
+
+echo "== tools: check (lint + scorecard, every package)"
+(cd tools && bun run check)
 
 echo "== standards core ($STD_TAG)"
 bash "$STANDARDS_DIR/standards/bin/check-core.sh" "$(pwd)"
