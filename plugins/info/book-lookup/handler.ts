@@ -9,7 +9,7 @@ export async function handleBook({ query, __attribution = "" }: { query: string;
   try {
     const url = `${API}?fo=json&c=5&q=${encodeURIComponent(query)}`;
     const response = await hostFetch(extra, url);
-    const items = (response?.results ?? []).slice(0, 5).map((x: any) => ({ title: String(x.title ?? ""), author: Array.isArray(x.contributors) ? x.contributors.join(", ") : null, year: x.date ? String(x.date).match(/\d{4}/)?.[0] ?? null : null, description: typeof x.description === "string" ? x.description.slice(0, 300) : null, url: typeof x.id === "string" ? x.id : null })).filter((x: any) => x.title);
+    const items = (response?.results ?? []).slice(0, 5).map((x: any) => ({ title: String(x.title ?? ""), author: Array.isArray(x.contributor) ? x.contributor.join(", ") : Array.isArray(x.contributors) ? x.contributors.join(", ") : null, year: x.date ? String(x.date).match(/\d{4}/)?.[0] ?? null : null, description: typeof x.description === "string" ? x.description.slice(0, 300) : null, url: typeof x.id === "string" ? x.id : null })).filter((x: any) => x.title);
     return { content: [{ type: "text" as const, text: JSON.stringify({ data: { ok: true, items, attribution: __attribution } }) }] };
   } catch { return { content: [{ type: "text" as const, text: JSON.stringify({ data: { ok: true, items: [], attribution: __attribution } }) }] }; }
 }
