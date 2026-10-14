@@ -80,7 +80,7 @@
       "id": "open-meteo",
       "destination": "Open-Meteo (open-meteo.com), a free public weather API",
       "when": "each time the family asks for the weather",
-      "what": "rounded weather coordinates (two decimals for teens and adults; one decimal for children); a spoken place name is sent only when the person names one",
+      "what": "the place name for a spoken request, or weather coordinates rounded to about one kilometre (two decimals for teens and adults; one decimal for children)",
       "who": "Open-Meteo",
       "opt_in": true,
       "retention": "unknown, see Open-Meteo's own policy"
@@ -92,7 +92,7 @@
   ],
   "notifications": [],
   "cache": {
-    "key_template": "weather:{latitude}:{longitude}",
+    "key_template": "weather:{place}",
     "ttl_s": 1800,
     "stale_ok_s": 3600,
     "max_bytes": 4096
@@ -100,11 +100,7 @@
   "warm": {
     "schedule": "every:1h",
     "keys": [
-      {
-        "latitude": 47.61,
-        "longitude": -122.33,
-        "place": "Seattle"
-      }
+      { "place": "Seattle" }
     ]
   },
   "backup": "exclude",
