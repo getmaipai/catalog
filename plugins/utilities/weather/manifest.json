@@ -4,7 +4,7 @@
   "kind": "plugin",
   "category": "Utilities",
   "display": "Weather",
-  "description": "Get the weather for a named place: temperature, conditions, today's high and low, and the chance of rain.",
+  "description": "Get the weather for a named place or the person's current place: temperature, conditions, today's high and low, and the chance of rain. Omit place when the person has not named one.",
   "author": "MaiPai",
   "license": "AGPL-3.0",
   "homepage": "https://github.com/getmaipai/home",
@@ -13,6 +13,7 @@
       "what's the weather in Seattle",
       "how's the weather in Chicago",
       "what's the weather like in Portland",
+      "what's the weather like",
       "weather in Denver",
       "how's the weather in Miami today",
       "is it going to rain in Portland today"
@@ -21,9 +22,7 @@
   },
   "args": {
     "type": "object",
-    "required": [
-      "place"
-    ],
+    "required": [],
     "properties": {
       "place": {
         "type": "string",
@@ -40,16 +39,50 @@
   "min_role": "child",
   "consequential": false,
   "offline": "unavailable",
-  "returns_blocks": ["spec_sheet", "chart", "data_table"],
-  "config": [],
+  "config": [
+    {
+      "key": "weather.places",
+      "scope": "person",
+      "selector": "location",
+      "range": {
+        "multiple": true,
+        "allow_current": false
+      },
+      "default": [],
+      "label": "Weather places",
+      "help": "Places saved for weather.",
+      "level": "basic",
+      "lives_in": "weather",
+      "honoured_by": [
+        "home"
+      ]
+    },
+    {
+      "key": "weather.default_place",
+      "scope": "person",
+      "selector": "location",
+      "range": {
+        "multiple": false,
+        "allow_current": true
+      },
+      "default": "current",
+      "label": "Weather default place",
+      "help": "The place used by default for weather.",
+      "level": "basic",
+      "lives_in": "weather",
+      "honoured_by": [
+        "home"
+      ]
+    }
+  ],
   "data_sources": [
     {
       "id": "open-meteo",
       "attribution": "Weather data by Open-Meteo.com (CC BY 4.0)",
       "hosts": ["geocoding-api.open-meteo.com", "api.open-meteo.com"],
       "destination": "Open-Meteo (open-meteo.com), a free public weather API",
-      "when": "each time the family asks for the weather somewhere",
-      "what": "the place name spoken in the request (e.g. 'Seattle')",
+      "when": "each time the family asks for the weather",
+      "what": "the place name only when someone names a place; otherwise weather coordinates rounded by the host (two decimals for teens and adults, one decimal for children)",
       "who": "Open-Meteo",
       "opt_in": true,
       "retention": "unknown, see Open-Meteo's own policy"
@@ -100,10 +133,5 @@
   "offer": {
     "mode": "base",
     "priority": 8
-  },
-  "returns_blocks": [
-    "spec_sheet",
-    "chart",
-    "data_table"
-  ]
+  }
 }

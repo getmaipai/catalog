@@ -22,30 +22,34 @@
       "op": "fetch",
       "as": "geo",
       "url": "https://geocoding-api.open-meteo.com/v1/search?count=1&name={place}",
-      "method": "GET"
+      "method": "GET",
+      "unless_set": "latitude"
     },
     {
       "op": "pick",
-      "as": "lat",
+      "as": "place",
       "from": "geo",
-      "path": "results.0.latitude"
+      "path": "results.0.name",
+      "unless_set": "latitude"
     },
     {
       "op": "pick",
-      "as": "lon",
+      "as": "longitude",
       "from": "geo",
-      "path": "results.0.longitude"
+      "path": "results.0.longitude",
+      "unless_set": "latitude"
     },
     {
       "op": "pick",
-      "as": "place_name",
+      "as": "latitude",
       "from": "geo",
-      "path": "results.0.name"
+      "path": "results.0.latitude",
+      "unless_set": "latitude"
     },
     {
       "op": "fetch",
       "as": "wx",
-      "url": "https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,weather_code&hourly=temperature_2m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=7&forecast_hours=24&timezone=auto&temperature_unit=fahrenheit",
+      "url": "https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m,weather_code&hourly=temperature_2m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=7&forecast_hours=24&timezone=auto&temperature_unit=fahrenheit",
       "method": "GET"
     },
     {
@@ -164,10 +168,10 @@
     {
       "op": "format",
       "as": "reply",
-      "text": "It's {temp} degrees and {conditions} in {place_name}. Today: high {high}, low {low}, {rain_pct}{rain_words}.",
-      "speech": "It's {temp} degrees and {conditions} in {place_name} right now. Today's high is {high}, the low {low}, {rain_pct}{rain_words}.",
+      "text": "It's {temp} degrees and {conditions} in {place}. Today: high {high}, low {low}, {rain_pct}{rain_words}.",
+      "speech": "It's {temp} degrees and {conditions} in {place} right now. Today's high is {high}, the low {low}, {rain_pct}{rain_words}.",
       "data": {
-        "place": "{place_name}",
+        "place": "{place}",
         "temperature": "{temp}",
         "conditions": "{conditions}",
         "high": "{high}",

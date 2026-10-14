@@ -19,6 +19,11 @@ All notable changes to the Weather package, in [Keep a Changelog](https://keepac
 
 ### Changed
 
+- Weather uses the host's coordinates when it has them and looks up a place
+  only when someone names one. This restores the optional place and coordinate
+  inputs, saved weather places, current-place default and routing example that
+  catalog sync `22830bd` had dropped.
+
 - The one-line description now says what the package does for the
   household, in one imperative sentence: it is the store-card line, the
   tool description the chat model sees, and the confirm prompt's own
