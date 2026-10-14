@@ -43,7 +43,7 @@
   "data_sources": [
     {
       "id": "loc",
-      "destination": "Library of Congress (loc.gov)",
+      "destination": "Library of Congress API (www.loc.gov)",
       "when": "once after a spoken query is complete",
       "what": "the title or author as you said it",
       "who": "Library of Congress (loc.gov)",
