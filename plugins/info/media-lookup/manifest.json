@@ -1,6 +1,6 @@
 {
   "id": "media-lookup",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "kind": "plugin",
   "category": "Info",
   "display": "Media Lookup",
@@ -50,7 +50,11 @@
       "what": "the title spoken in the request (e.g. 'Cobra'), and a release year when one was given",
       "who": "the Wikimedia Foundation",
       "opt_in": true,
-      "retention": "unknown, see Wikimedia's own policy"
+      "retention": "unknown, see Wikimedia's own policy",
+      "attribution": "Data from Wikidata",
+      "hosts": [
+        "www.wikidata.org"
+      ]
     },
     {
       "id": "wikipedia",
@@ -59,7 +63,11 @@
       "what": "the film or TV show's own Wikipedia page title, resolved from Wikidata, never anything typed by the family",
       "who": "the Wikimedia Foundation",
       "opt_in": true,
-      "retention": "unknown, see Wikimedia's own policy"
+      "retention": "unknown, see Wikimedia's own policy",
+      "attribution": "Wikipedia content is available under CC BY-SA 4.0",
+      "hosts": [
+        "en.wikipedia.org"
+      ]
     }
   ],
   "permissions": [
