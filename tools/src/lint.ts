@@ -48,6 +48,7 @@ ajv.addSchema(JSON.parse(readFileSync(join(SCHEMA_DIR, "settings-key.schema.json
 ajv.addSchema(JSON.parse(readFileSync(join(SCHEMA_DIR, "settings-area.schema.json"), "utf-8")));
 // manifest.schema.json $refs answer-block.schema.json#/$defs/kind since spec-v0.1.104.
 ajv.addSchema(JSON.parse(readFileSync(join(SCHEMA_DIR, "answer-block.schema.json"), "utf-8")));
+ajv.addSchema(JSON.parse(readFileSync(join(SCHEMA_DIR, "tour.schema.json"), "utf-8")));
 ajv.addSchema(JSON.parse(readFileSync(join(STANDARDS_SCHEMAS_DIR, "privacy-row.schema.json"), "utf-8")));
 const manifestSchema = JSON.parse(readFileSync(join(SCHEMA_DIR, "manifest.schema.json"), "utf-8"));
 const validateManifest = ajv.compile(manifestSchema);
