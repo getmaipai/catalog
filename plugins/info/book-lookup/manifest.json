@@ -49,7 +49,7 @@
       "who": "Library of Congress (loc.gov)",
       "opt_in": true,
       "retention": "unknown, see the provider's own policy",
-      "attribution": "Library of Congress catalog data. See https://www.loc.gov/legal/security-copyright-and-privacy/understanding-copyright/",
+      "attribution": "A citation acknowledging the institution and assisting further scholarship is appreciated. https://www.loc.gov/duplicationservices/copyright/",
       "hosts": [
         "www.loc.gov"
       ]
