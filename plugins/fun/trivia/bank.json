@@ -195,7 +195,7 @@
       "category": "earth and nature",
       "question": "What gas do plants take in from air?",
       "answer": "Carbon dioxide",
-      "source": "https://www.nasa.gov/learning-resources/for-kids-and-students/"
+      "source": "https://science.nasa.gov/earth/earth-observatory/the-carbon-cycle/"
     },
     {
       "id": "c-025",
@@ -321,7 +321,7 @@
       "id": "c-040",
       "band": "child",
       "category": "words and spelling",
-      "question": "What is the opposite of the word “hot”?",
+      "question": "What is the opposite of “hot” on a hot/cold scale?",
       "answer": "Cold",
       "source": "https://www.merriam-webster.com/thesaurus/hot"
     },
@@ -403,7 +403,7 @@
       "category": "earth and nature",
       "question": "What is the most abundant gas in Earth’s atmosphere by volume?",
       "answer": "Nitrogen",
-      "source": "https://climate.nasa.gov/faq/19/what-is-the-atmosphere/"
+      "source": "https://www.noaa.gov/jetstream/atmosphere"
     },
     {
       "id": "t-010",
