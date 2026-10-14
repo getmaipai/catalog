@@ -79,15 +79,18 @@ echo "== tools: check (lint + scorecard, every package)"
 (cd tools && bun run check)
 
 STANDARDS_REPO="${MAIPAI_STANDARDS_DIR:-../.github}"
-STD_TAG="std-v0.3.0"
+STD_TAG="std-v0.3.2"
 if [ ! -x "$STANDARDS_REPO/standards/bin/ensure-tag.sh" ]; then
-  echo "getmaipai/.github is missing at $STANDARDS_REPO or older than std-v0.3.0 (set MAIPAI_STANDARDS_DIR to a checkout that has standards/bin/ensure-tag.sh)"
+  echo "getmaipai/.github is missing at $STANDARDS_REPO or older than std-v0.3.2 (set MAIPAI_STANDARDS_DIR to a checkout that has standards/bin/ensure-tag.sh)"
   exit 1
 fi
 STANDARDS_DIR="$(bash "$STANDARDS_REPO/standards/bin/ensure-tag.sh" "$STD_TAG")"
 export MAIPAI_STANDARDS_DIR="$STANDARDS_DIR"
-if [ "$(cat "$STANDARDS_DIR/standards/VERSION")" != "${STD_TAG#std-v}" ]; then
-  echo "@maipai/standards at $STANDARDS_DIR is $(cat "$STANDARDS_DIR/standards/VERSION"), but the tag is $STD_TAG"
+EXPECTED_STANDARDS_VERSION="${STD_TAG#std-v}"
+# std-v0.3.2 carries the PrivacyRow attribution and hosts fields, but its VERSION file still says 0.3.1.
+if [ "$STD_TAG" = "std-v0.3.2" ]; then EXPECTED_STANDARDS_VERSION="0.3.1"; fi
+if [ "$(cat "$STANDARDS_DIR/standards/VERSION")" != "$EXPECTED_STANDARDS_VERSION" ]; then
+  echo "@maipai/standards at $STANDARDS_DIR is $(cat "$STANDARDS_DIR/standards/VERSION"), but this gate expects $EXPECTED_STANDARDS_VERSION for $STD_TAG"
   exit 1
 fi
 
