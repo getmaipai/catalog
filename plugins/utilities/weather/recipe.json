@@ -3,14 +3,20 @@
   "inputs": [
     {
       "name": "place",
-      "selector": "text"
+      "selector": "text",
+      "required": false
+    },
+    {
+      "name": "location_query",
+      "selector": "text",
+      "required": false
     }
   ],
   "steps": [
     {
       "op": "fetch",
       "as": "geo",
-      "url": "https://geocoding-api.open-meteo.com/v1/search?count=1&name={place}",
+      "url": "https://geocoding-api.open-meteo.com/v1/search?count=1&name={location_query}",
       "method": "GET"
     },
     {
