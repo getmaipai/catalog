@@ -133,6 +133,5 @@
   "offer": {
     "mode": "base",
     "priority": 8
-  },
-  "recipe": null
+  }
 }

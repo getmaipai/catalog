@@ -7,19 +7,12 @@
       "required": false
     },
     {
-      "name": "location_query",
-      "selector": "text",
-      "required": false
-    },
-    {
       "name": "latitude",
-      "selector": "number",
-      "required": false
+      "selector": "number"
     },
     {
       "name": "longitude",
-      "selector": "number",
-      "required": false
+      "selector": "number"
     }
   ],
   "steps": [
