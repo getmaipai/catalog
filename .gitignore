@@ -1,0 +1,6 @@
+# Dependencies and per-machine files
+node_modules/
+.DS_Store
+
+# Per-session worktree data: wt.sh sessions, ports and gate stamps, scratch notes
+data-scratch/
