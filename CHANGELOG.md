@@ -24,6 +24,8 @@ checklist; no release has been cut yet.
   as Markdown, and the CI job that posts it on every pull request.
 - The engine index: `engines/index.json`, the signed list of pinned
   engine builds MaiPai Stack installs from, with its builder.
+- The moves pack (PKG-MOVES-01): `moves/index.json`, the signed `moves-index.json` of 80 Pollen emotion clips and 19 dance
+  clips pinned by commit revision, sha256 and size, with its `NOTICE`, validator and builder. No clip file is stored here.
 - Public CI on pull requests and tags running the same `check.sh` a
   contributor runs locally.
 - The first packages: the `info`, `fun` and `utilities` plugins and the

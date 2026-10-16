@@ -1,0 +1,15 @@
+MaiPai moves pack (PKG-MOVES-01)
+Third-Party Licenses and Attributions
+
+This package ships no motion files. Its index points at recorded moves from two datasets by Pollen Robotics,
+published on Hugging Face under the Apache-2.0 license (https://www.apache.org/licenses/LICENSE-2.0):
+
+- reachy-mini-emotions-library, revision 873ae49f0b89114b7e535eff0c1f7560d21d9357
+  https://huggingface.co/datasets/pollen-robotics/reachy-mini-emotions-library
+- reachy-mini-dances-library, revision 3564295e72d41c1271f46bf5540a3fcad9d5f669
+  https://huggingface.co/datasets/pollen-robotics/reachy-mini-dances-library
+
+Credit to Pollen Robotics and Hugging Face. When the pack is installed, Home downloads each file at the pinned
+revision, checks its sha256 against this package's index, and serves it to the robot unchanged (clips that fail the
+robot's envelope check are excluded, never edited). The move format and the community moves tag
+(reachy_mini_community_moves) are Pollen's.

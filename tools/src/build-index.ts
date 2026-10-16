@@ -187,6 +187,11 @@ export async function buildIndex(
       const { buildListIndex, readListIndexSource } = await import("./list-index");
       writeEnvelope(buildListIndex(readListIndexSource(listSourcePath), signers.primary, version), join(outDir, "list-index.json"));
     }
+    const movesSourcePath = join(engineSourcePath, "..", "..", "moves", "index.json");
+    if (existsSync(movesSourcePath)) {
+      const { buildMovesIndex, readMovesIndexSource } = await import("./moves-index");
+      writeEnvelope(buildMovesIndex(readMovesIndexSource(movesSourcePath), signers.primary, version), join(outDir, "moves-index.json"));
+    }
   }
 
   return { outDir, rootPath, targetsPath, timestampPath, tarballs };
