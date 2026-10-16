@@ -23,8 +23,8 @@ const source = (over: Record<string, unknown> = {}): unknown => ({ version: "v",
 describe("the shipped moves index (PKG-MOVES-01)", () => {
   const index = readMovesIndexSource(SOURCE);
   const find = (id: string) => index.libraries.find((l) => l.id === id)!;
-  test("pins 80 emotions and 19 dances, each with a checksum and a size", () => {
-    expect(find("pollen-emotions").clips).toHaveLength(80);
+  test("pins 82 emotions and 19 dances, each with a checksum and a size", () => {
+    expect(find("pollen-emotions").clips).toHaveLength(82);
     expect(find("pollen-dances").clips).toHaveLength(19);
     for (const l of index.libraries) for (const c of l.clips) {
       expect(c.sha256).toMatch(/^[0-9a-f]{64}$/);
@@ -35,6 +35,15 @@ describe("the shipped moves index (PKG-MOVES-01)", () => {
     const emotions = find("pollen-emotions");
     expect(emotions.excluded.map((e) => e.id)).toContain("sad2");
     expect(emotions.clips.map((c) => c.id)).not.toContain("sad2");
+  });
+  test("the repinned clips play and the antenna-limit clips stay out", () => {
+    const emotions = find("pollen-emotions");
+    const clips = emotions.clips.map((c) => c.id);
+    expect(clips).toContain("toc-toc-toc");
+    expect(clips).toContain("waiting");
+    expect(emotions.excluded.map((e) => e.id).sort()).toEqual(["mini-deep-sleep", "sad2", "wake-mini-up"]);
+    expect(emotions.clips.find((c) => c.id === "toc-toc-toc")!.bytes).toBe(352973);
+    expect(emotions.clips.find((c) => c.id === "waiting")!.bytes).toBe(264778);
   });
   test("every library is Apache-2.0 at a full commit revision", () => {
     for (const l of index.libraries) {

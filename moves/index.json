@@ -515,6 +515,13 @@
           "description": "You yawn because you’re tired. Could be between tasks, especially after working hard."
         },
         {
+          "id": "toc-toc-toc",
+          "file": "toc-toc-toc.json",
+          "sha256": "2c4d0fc049a9db0e35436615a6b2259c315f16cf96f75cf64eb5761b3a6a3190",
+          "bytes": 352973,
+          "description": "Recorded 2026-07-07T11:35:21.602Z"
+        },
+        {
           "id": "uncertain1",
           "file": "uncertain1.json",
           "sha256": "897f80471bd2eb3a073dd05dd82bbd428cca2d8051181cf5526bdbbe021dd0e9",
@@ -541,6 +548,13 @@
           "sha256": "78294e3e9b71a590d488e9578a0c1b123ad4c6236a3a4af8ef4a74707a2cf4e6",
           "bytes": 29460,
           "description": "You nod to show you’ve understood and agree. Can also be used to say yes."
+        },
+        {
+          "id": "waiting",
+          "file": "waiting.json",
+          "sha256": "5fc7e14ce0f41e6f61b004a054511651379d35a3bea3f10c48c2b3b368f5b01b",
+          "bytes": 264778,
+          "description": "Recorded 2026-07-07T11:43:51.784Z"
         },
         {
           "id": "welcoming1",
@@ -574,23 +588,15 @@
       "excluded": [
         {
           "id": "mini-deep-sleep",
-          "reason": "not a well-formed move: mini-deep-sleep: times must strictly increase"
+          "reason": "antenna_left target -3.1493 rad is outside [-3.1416, 3.1416] rad (the running daemon's /api/kinematics/urdf, right_antenna/left_antenna joint limits (reachy-mini daemon 1.11.0, verified live against the simulator, 2026-09-27), 2026-09-27)"
         },
         {
           "id": "sad2",
           "reason": "antenna_right target 3.1469 rad is outside [-3.1416, 3.1416] rad (the running daemon's /api/kinematics/urdf, right_antenna/left_antenna joint limits (reachy-mini daemon 1.11.0, verified live against the simulator, 2026-09-27), 2026-09-27)"
         },
         {
-          "id": "toc-toc-toc",
-          "reason": "not a well-formed move: toc-toc-toc: times must strictly increase"
-        },
-        {
-          "id": "waiting",
-          "reason": "not a well-formed move: waiting: times must strictly increase"
-        },
-        {
           "id": "wake-mini-up",
-          "reason": "not a well-formed move: wake-mini-up: times must strictly increase"
+          "reason": "antenna_right target 3.1416 rad is outside [-3.1416, 3.1416] rad (the running daemon's /api/kinematics/urdf, right_antenna/left_antenna joint limits (reachy-mini daemon 1.11.0, verified live against the simulator, 2026-09-27), 2026-09-27)"
         }
       ]
     },

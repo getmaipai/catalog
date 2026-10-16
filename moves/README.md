@@ -1,6 +1,6 @@
 # moves/
 
-The optional recorded emotions and dances pack (PKG-MOVES-01): 80 emotion clips and 19 dance clips from Pollen
+The optional recorded emotions and dances pack (PKG-MOVES-01): 82 emotion clips and 19 dance clips from Pollen
 Robotics' two Hugging Face datasets, each pinned by full commit revision, file name, sha256 and byte size. Home
 installs the pack on request; the robot never fetches it, Home serves each clip to the robot after checking its
 sha256. Without the pack, the expression map plays only the built-in primitives.
@@ -17,9 +17,9 @@ address is the library's `base_url` plus the clip's `file`. The pins live in thi
 | `libraries[].clips[]` | `id`, `file` (`<id>.json`), `sha256`, `bytes`, `description` (the dataset's clip index) |
 | `libraries[].excluded[]` | clips that were pinned and failed the envelope or format check, with the reason; never installed, never clipped |
 
-Excluded today: `sad2` (right antenna target 3.1469 rad is past the 3.1416 rad limit) and four emotion clips whose
-times do not strictly increase (`mini-deep-sleep`, `toc-toc-toc`, `waiting`, `wake-mini-up`). Whether the player
-should accept equal timestamps is the format owner's call; until then they stay excluded.
+Excluded today, all for the antenna limit and never clipped: `sad2` (right antenna 3.1469 rad), `mini-deep-sleep`
+(left antenna -3.1493 rad) and `wake-mini-up` (right antenna 3.1416 rad, over the limit by a rounding margin). The
+robot player accepts equal neighbouring timestamps, so `toc-toc-toc` and `waiting` are pinned.
 
 The age allow-list (no `rage, furious, dying, contempt, disgusted, go_away, reprimand` for a child, a teen or an
 unstated age band) is enforced on the robot in `bot` (`moves/allowlist.py`) and by the spec's emotion map; this index
