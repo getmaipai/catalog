@@ -26,6 +26,9 @@ remembered for a little while, so asking again right away doesn't need a new
 lookup. See
 the household's Privacy page for the full "what leaves the house" row.
 
+For the hourly background refresh, Home substitutes the household's home place for the
+`__HOME_PLACE__` manifest placeholder. The placeholder is never sent to Open-Meteo.
+
 ## Offline
 
 Weather needs the internet - it can't answer without it.
