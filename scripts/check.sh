@@ -33,7 +33,7 @@ esac
 # own `bun install --frozen-lockfile` won't do that for you - it fails
 # loud instead if the lockfile's still stale).
 if [ "$MODE" != docs ]; then
-  SPEC_TAG="spec-v0.1.164"
+  SPEC_TAG="spec-v0.1.168"
   COMMONS_REPO="${MAIPAI_COMMONS_DIR:-../commons}"
   # `-f .../scripts/ensure-tag.sh`, not just `-d`: a directory that
   # exists but isn't really getmaipai/commons (wrong path, stale copy)
