@@ -26,3 +26,8 @@ same shape as the package index) that the release attaches. The release
 key is the catalog's (see `docs/dev.md`, signing); a local build uses
 the dev signers. `bun run build-index` publishes the signed envelope at
 `engines/index.json` on the site.
+
+The index includes Inco Splash 1.3.2 for macOS Apple silicon. The Stack
+must check for Apple M3 or newer, macOS 26.4 or newer and at least 36 GB
+of memory before install. Run with `--offline`; CODE-PRIVACY-01 must record
+its outbound behaviour before Splash ships as the default.

@@ -22,6 +22,23 @@ describe("validateEngineIndex", () => {
     expect(validateEngineIndex(source)).toMatchObject({ ok: true });
   });
 
+  test("pins Splash 1.3.2 to the verified Apple silicon archive on an allowed host", () => {
+    const source = readEngineIndexSource(SOURCE);
+    const entries = source.engines.filter((entry) => entry.name === "splash");
+    expect(entries).toHaveLength(1);
+    const entry = entries[0]!;
+    expect(entry).toMatchObject({
+      name: "splash", tag: "1.3.2", platform: "darwin", arch: "arm64", licence: "Apache-2.0",
+      url: "https://github.com/incoai/splash/releases/download/1.3.2/splash-1.3.2-arm64-macos26.tar.gz",
+      sha256: "c3deb1dd971461ffafcf6b82c318789d6698b22aa865e490a11a0ed943686c0b",
+      size: 74590927,
+    });
+    expect(entry.requires).toBeUndefined();
+    expect(new URL(entry.url).protocol).toBe("https:");
+    expect(ALLOWED_ENGINE_HOSTS as readonly string[]).toContain(new URL(entry.url).hostname);
+    expect(validateEngineIndex(source)).toMatchObject({ ok: true });
+  });
+
   test("refuses a tag that is not an upstream build tag, an http url, a short checksum, and a duplicate pin", () => {
     const bad = (patch: Partial<EngineIndexSource["engines"][number]>) => validateEngineIndex({ version: "v", engines: [{ ...valid.engines[0]!, ...patch }] });
     expect(bad({ tag: "b10797-macos-arm64" })).toMatchObject({ ok: false });
@@ -47,7 +64,7 @@ describe("validateEngineIndex", () => {
 
   test("shipped index contains the core engine names", () => {
     const source = readEngineIndexSource(SOURCE);
-    expect(new Set(source.engines.map((entry) => entry.name))).toEqual(new Set(["llama-server", "uv", "comfyui"]));
+    expect(new Set(source.engines.map((entry) => entry.name))).toEqual(new Set(["llama-server", "uv", "comfyui", "splash"]));
   });
 });
 

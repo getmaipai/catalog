@@ -8,6 +8,11 @@ checklist; no release has been cut yet.
 ## [Unreleased]
 
 ### Added
+- Splash 1.3.2 for macOS Apple silicon in the engine index, with the verified
+  archive pin, hardware admission notes and the offline privacy requirement
+  (CODE-STACK-01 C1).
+- The model package schema gaps blocking CODE-STACK-01 C2 are recorded in
+  `models/README.md`; no unsupported manifest fields were added.
 - The repo skeleton: `LICENSE`, `NOTICE`, `README.md`, `CONTRIBUTING.md`,
   `ASSIGNMENT.md`, `AGENTS.md`, the per-kind package directories and
   `scripts/check.sh` pinned to `@maipai/standards`.
