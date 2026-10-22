@@ -22,16 +22,16 @@ describe("validateEngineIndex", () => {
     expect(validateEngineIndex(source)).toMatchObject({ ok: true });
   });
 
-  test("pins Splash 1.3.2 to the verified Apple silicon archive on an allowed host", () => {
+  test("pins Splash 1.3.2-ornith.1 to the verified Apple silicon archive on an allowed host", () => {
     const source = readEngineIndexSource(SOURCE);
     const entries = source.engines.filter((entry) => entry.name === "splash");
     expect(entries).toHaveLength(1);
     const entry = entries[0]!;
     expect(entry).toMatchObject({
-      name: "splash", tag: "1.3.2", platform: "darwin", arch: "arm64", licence: "Apache-2.0",
-      url: "https://github.com/incoai/splash/releases/download/1.3.2/splash-1.3.2-arm64-macos26.tar.gz",
-      sha256: "c3deb1dd971461ffafcf6b82c318789d6698b22aa865e490a11a0ed943686c0b",
-      size: 74590927,
+      name: "splash", tag: "1.3.2-ornith.1", platform: "darwin", arch: "arm64", licence: "Apache-2.0",
+      url: "https://github.com/getmaipai/stack/releases/download/engine-splash-1.3.2-ornith.1/splash-1.3.2-ornith.1-arm64-macos26.tar.gz",
+      sha256: "b438df121e6b1b2d66d50687062ca1f5521bc0063ea1d1147338714a6f982d57",
+      size: 75874298,
     });
     expect(entry.requires).toBeUndefined();
     expect(new URL(entry.url).protocol).toBe("https:");
