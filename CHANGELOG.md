@@ -7,6 +7,9 @@ checklist; no release has been cut yet.
 
 ## [Unreleased]
 
+### Changed
+- `engines/index.json`: the Splash entry is the org's build of Splash 1.3.2 with Ornith-1.5-122B support (`1.3.2-ornith.1`, sha256 `b438df12...`), and the engine index schema accepts a tag suffix (MODE-ENGINE-01).
+
 ### Added
 - Splash 1.3.2 for macOS Apple silicon in the engine index, with the verified
   archive pin, hardware admission notes and the offline privacy requirement
