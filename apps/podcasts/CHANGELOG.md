@@ -2,6 +2,10 @@
 
 All notable changes to the Podcasts package, in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [0.2.2] - 2026-10-28
+
+- The pages match the hub's own copy again (the cinema tone is gone from the page headers).
+
 ## [0.2.1] - 2026-10-28
 
 - Filters: save a filter of episodes by unplayed or in progress, saved on the hub, length, shows and how recently released, and see what matches. A filter is private to the person who made it and only narrows what that person can already see.
