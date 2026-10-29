@@ -2,6 +2,12 @@
 
 All notable changes to the Weather package, in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [0.3.8] - 2026-10-29
+
+### Fixed
+
+- The Alerts card names the group the alerts key lives in (household.weather), so the switch appears.
+
 ## [0.3.7] - 2026-10-29
 
 ### Added
