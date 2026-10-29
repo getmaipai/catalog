@@ -2,6 +2,12 @@
 
 All notable changes to the Weather package, in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [0.3.7] - 2026-10-29
+
+### Added
+
+- Weather settings has an Alerts card with the household switch for US weather alerts (off by default).
+
 ## [0.3.6] - 2026-10-28
 
 ### Added
